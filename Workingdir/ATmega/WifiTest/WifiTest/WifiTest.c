@@ -15,7 +15,7 @@
 #include "timer.h"
 
 
-#define SERVER_IP_STR	"192.168.10.227"
+#define SERVER_IP_STR	"192.168.10.227"   //라즈베리파이 켜고 수정해야할 부 
 #define SERVER_PORT		50001
 
 static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
@@ -60,7 +60,7 @@ int main(void)
 	
 	// connect  AP 
 	debugprint("\r\n");
-	if ( !wifiConnectAP("CNDI_AES", "cndi313182246"))
+	if ( !wifiConnectAP("301", "gwnucomse"))
 	{
 		debugprint("AP connected.\r\n");
 	}
@@ -87,7 +87,8 @@ int main(void)
 	// Send Test message 
 	strcpy(strTemp,"test msessage: hello\r\n");
 	wifiSendData(strTemp, sizeof("test msessage: hello\r\n"));
-	 
+	
+	 //여기서부터 실제 데이터가 가공된다. 
 	TIMER_100mSInit ();
 	setElapsedTime100mSUnit(100);
 
@@ -100,9 +101,9 @@ int main(void)
 		
 		if ( isElapsed())
 		{
-			sprintf(strTemp,"hello:%d\r\n",counter++);				//가장 핵심적인 부분 
-			wifiSendData(strTemp, strlen(strTemp));					//가장 핵심적인 부분  
-			debugprint("TX:%s\r\n",strTemp);						//가장 핵심적인 부분  
+			sprintf(strTemp,"hello:%d\r\n",counter++);		//가장 핵심적인 부분 
+			wifiSendData(strTemp, strlen(strTemp));			//가장 핵심적인 부분  
+			debugprint("TX:%s\r\n",strTemp);				//가장 핵심적인 부분  
 		}
 		
     }
