@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Buzzer_Module", "Buzzer_Module\Buzzer_Module.cproj", "{A1EB0928-10BF-46E6-970E-745A2D8F672E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1EB0928-10BF-46E6-970E-745A2D8F672E}.Debug|AVR.ActiveCfg = Debug|AVR
+		{A1EB0928-10BF-46E6-970E-745A2D8F672E}.Debug|AVR.Build.0 = Debug|AVR
+		{A1EB0928-10BF-46E6-970E-745A2D8F672E}.Release|AVR.ActiveCfg = Release|AVR
+		{A1EB0928-10BF-46E6-970E-745A2D8F672E}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

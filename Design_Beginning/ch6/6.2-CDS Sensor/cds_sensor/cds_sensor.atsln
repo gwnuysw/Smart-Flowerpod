@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "cds_sensor", "cds_sensor.cproj", "{4FFCC2A0-6BAF-4649-B7BA-6055826915FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FFCC2A0-6BAF-4649-B7BA-6055826915FB}.Debug|AVR.ActiveCfg = Debug|AVR
+		{4FFCC2A0-6BAF-4649-B7BA-6055826915FB}.Debug|AVR.Build.0 = Debug|AVR
+		{4FFCC2A0-6BAF-4649-B7BA-6055826915FB}.Release|AVR.ActiveCfg = Release|AVR
+		{4FFCC2A0-6BAF-4649-B7BA-6055826915FB}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

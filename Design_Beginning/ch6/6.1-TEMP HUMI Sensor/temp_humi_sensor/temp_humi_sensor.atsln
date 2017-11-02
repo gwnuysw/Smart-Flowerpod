@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "temp_humi_sensor", "temp_humi_sensor.cproj", "{687CB12B-988E-4875-88A3-E05EA324ED9A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{687CB12B-988E-4875-88A3-E05EA324ED9A}.Debug|AVR.ActiveCfg = Debug|AVR
+		{687CB12B-988E-4875-88A3-E05EA324ED9A}.Debug|AVR.Build.0 = Debug|AVR
+		{687CB12B-988E-4875-88A3-E05EA324ED9A}.Release|AVR.ActiveCfg = Release|AVR
+		{687CB12B-988E-4875-88A3-E05EA324ED9A}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

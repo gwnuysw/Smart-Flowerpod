@@ -1,0 +1,3 @@
+Service , Message , Max , Min , Average , Count , frequency , TimedOut
+
+Stream,setLogBits,4.0002,1,2.5001,2,0
