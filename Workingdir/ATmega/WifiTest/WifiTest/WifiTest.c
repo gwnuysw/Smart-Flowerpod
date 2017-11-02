@@ -100,9 +100,9 @@ int main(void)
 		
 		if ( isElapsed())
 		{
-			sprintf(strTemp,"hello:%d\r\n",counter++);
-			wifiSendData(strTemp, strlen(strTemp));
-			debugprint("TX:%s\r\n",strTemp);
+			sprintf(strTemp,"hello:%d\r\n",counter++);				//가장 핵심적인 부분 
+			wifiSendData(strTemp, strlen(strTemp));					//가장 핵심적인 부분  
+			debugprint("TX:%s\r\n",strTemp);						//가장 핵심적인 부분  
 		}
 		
     }

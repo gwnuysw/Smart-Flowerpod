@@ -125,19 +125,19 @@ void *client_thread(void *arg)
 
 	while(1)
 	{
-		readBufSize = read(clnt_sock, rcv_buf, RX_DATA_MAX);
+		readBufSize = read(clnt_sock, rcv_buf, RX_DATA_MAX);  //소켓이로부터 문자를 읽어서 rcv_buf에 저장 하는데 그 크기는  최대 크기는 2048BYTE다 
 
 		if(readBufSize > 0)
 		{
-			printf("rx len:%d\n", readBufSize);
+			printf("rx len:%d\n", readBufSize); //read()함수는 정상적으로 읽었다면 읽은 BYTE수를 반환 한다. 
 
-			rcv_buf[readBufSize] = 0;
-			printf("%s\n", rcv_buf);
+			rcv_buf[readBufSize] = 0;	//맨 뒷자리를 0으로 셋팅  
+			printf("%s\n", rcv_buf);	//읽어온 대로 출력  
 			
 			// echo TX
-			writeBufSize = write(clnt_sock,rcv_buf , readBufSize);
-			printf("Send data len: %d\n",writeBufSize);
-			if(writeBufSize < 0)
+			writeBufSize = write(clnt_sock,rcv_buf , readBufSize);  //위와 마찬가지 
+			printf("Send data len: %d\n",writeBufSize); //이것도 마찬가지 
+			if(writeBufSize < 0)						//클라이언트로 되전송 하는 부분이 없다??? 
 			{
 				printf("echo write() error\n");	
 				break;
