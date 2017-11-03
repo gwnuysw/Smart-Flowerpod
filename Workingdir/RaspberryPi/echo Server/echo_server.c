@@ -135,9 +135,9 @@ void *client_thread(void *arg)
 			printf("%s\n", rcv_buf);	//읽어온 대로 출력  
 			
 			// echo TX
-			writeBufSize = write(clnt_sock,rcv_buf , readBufSize);  //위와 마찬가지 
-			printf("Send data len: %d\n",writeBufSize); //이것도 마찬가지 
-			if(writeBufSize < 0)						//클라이언트로 되전송 하는 부분이 없다??? 
+			writeBufSize = write(clnt_sock,rcv_buf , readBufSize);  //받은 데이터를 clnt_sock으로 되돌려 줍니다. 
+			printf("Send data len: %d\n",writeBufSize); //되돌려준 데이터의 길이를 알려줍니다. 
+			if(writeBufSize < 0)						 
 			{
 				printf("echo write() error\n");	
 				break;

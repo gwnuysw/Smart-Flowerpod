@@ -15,7 +15,7 @@
 #include "timer.h"
 
 
-#define SERVER_IP_STR	"192.168.10.227"   //라즈베리파이 켜고 수정해야할 부 
+#define SERVER_IP_STR	"192.168.1.33"   //라즈베리파이 켜고 수정해야할 부분 
 #define SERVER_PORT		50001
 
 static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
