@@ -13,7 +13,7 @@
 #include "debug.h"
 #include "Esp8266.h"
 #include "timer.h"
-
+#include "CDSsensor.h"
 
 #define SERVER_IP_STR	"192.168.1.33"   //라즈베리파이 켜고 수정해야할 부분 
 #define SERVER_PORT		50001
@@ -101,7 +101,7 @@ int main(void)
 		
 		if ( isElapsed())
 		{
-			sprintf(strTemp,"hello:%d\r\n",counter++);		//가장 핵심적인 부분 
+			sprintf(strTemp,"hello:%d CDS : %d\r\n",counter++,gun_AdcValue);		//가장 핵심적인 부분 
 			wifiSendData(strTemp, strlen(strTemp));			//가장 핵심적인 부분  
 			debugprint("TX:%s\r\n",strTemp);				//가장 핵심적인 부분  
 		}

@@ -17,15 +17,6 @@
 #define RED		0
 #define GREEN	1
 
-unsigned int gun_AdcValue	=	0;
-unsigned char guc_OverflowCnt	=	0;
-int n_flag_getADC = 0;
-
-void TIMER_Init();
-void LED_Init ();
-void ADC_Init ();
-void controlLED (int color, unsigned char data);
-
 ISR (TIMER0_OVF_vect)	// Timer0 Overflow0 ISR
 {
 	TCNT0	=	0xff - 45;		// 0.003s
@@ -87,7 +78,7 @@ void controlLED (int color, unsigned char data)
 	}
 }		
 
-void main (void)
+void CDSmain (void)
 {
 //	debugInit();
 	
@@ -103,7 +94,8 @@ void main (void)
 		{
 			n_flag_getADC = 0;
 			
-			gun_AdcValue	=	AdcRead();
+			gun_AdcValue	=	AdcRead();		//조도값중요!!!!!! 
+			
 //			debugprint("gun_AdcValue : %d\r\n", gun_AdcValue);			
 		}
 		
