@@ -72,6 +72,18 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="adc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="adc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CDSsensor.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CDSsensor.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="debug.c">
       <SubType>compile</SubType>
     </Compile>
@@ -82,6 +94,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Esp8266.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="gpio.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="gpio.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="timer.c">

@@ -4,21 +4,6 @@ volatile uint32_t timerCouter = 0;
 volatile uint32_t setTimerCheckCounter = 0;
 volatile uint8_t  flagOverflowSetTimer = 0;
   
-ISR(TIMER0_OVF_vect) {
-	cli();
-	// 0.01s에 오버플로우 발생, 1/(14745600Hz/1024)ⅹ144 = 0.01s
-	TCNT0	=	0xff - 144;
-
-	timerCouter++;
-	
-	if ( timerCouter >= setTimerCheckCounter )
-	{
-		flagOverflowSetTimer = 1;
-		timerCouter = 0;
-	}
-	sei();
-}
-  
   
 void TIMER_100mSInit (void)
 {

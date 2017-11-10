@@ -1,7 +1,7 @@
 /*
  * WifiTest.c
  *
- * Created: 2016-04-01 ì˜¤í›„ 5:43:33
+ * Created: 2016-04-01 ?¤í›„ 5:43:33
  *  Author: dogu
  */ 
 
@@ -14,9 +14,16 @@
 #include "Esp8266.h"
 #include "timer.h"
 #include "CDSsensor.h"
+#include "adc.h"
 
 #define SERVER_IP_STR	"192.168.1.33"   //¶óÁîº£¸®ÆÄÀÌ ÄÑ°í ¼öÁ¤ÇØ¾ßÇÒ ºÎºÐ 
 #define SERVER_PORT		50001
+#define RED		0					//-------------v¼öÁ¤ºÎºÐ
+#define GREEN	1				
+
+
+unsigned int gun_AdcValue = 0;
+extern int n_flag_getADC;//--------------^¼öÁ¤ºÎºÐ
 
 static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
 {
@@ -60,7 +67,7 @@ int main(void)
 	
 	// connect  AP 
 	debugprint("\r\n");
-	if ( !wifiConnectAP("301", "gwnucomse"))
+	if ( !wifiConnectAP("CSNET-301", "gwnucomse"))
 	{
 		debugprint("AP connected.\r\n");
 	}
@@ -93,15 +100,73 @@ int main(void)
 	setElapsedTime100mSUnit(100);
 
 	debugprint("start Loop\r\n");	
+	
 	int counter = 0;
+
+	LED_Init ();		// PORTB = GREEN, PORTE = RED------------------------v¼öÁ¤ ºÎºÐ
+	AdcInit(1);			// PORTF = ADC1
+	TIMER_Init();
+		
+	sei();//-------------------------------------------^¼öÁ¤ºÎºÐ
+	
+	
     while(1)
     {
+
+		if(n_flag_getADC == 1)			//---------------------------------v¼öÁ¤ºÎºÐ
+		{
+			n_flag_getADC = 0;
+			
+			gun_AdcValue	=	AdcRead();		//Á¶µµ°ªÁß¿ä!!!!!!
+			
+			//			debugprint("gun_AdcValue : %d\r\n", gun_AdcValue);
+		}
+		
+		
+		if (gun_AdcValue < 640 && gun_AdcValue >= 600)
+		{	controlLED (GREEN, 0x80);	controlLED (RED, 0x00);	}
+		else if (gun_AdcValue < 600 && gun_AdcValue >= 560)
+		{	controlLED (GREEN, 0xC0);	controlLED (RED, 0x00);	}
+		else if (gun_AdcValue < 560 && gun_AdcValue >= 520)
+		{	controlLED (GREEN, 0xE0);	controlLED (RED, 0x00);	}
+		else if (gun_AdcValue < 520 && gun_AdcValue >= 480)
+		{	controlLED (GREEN, 0xF0);	controlLED (RED, 0x00);	}
+		else if (gun_AdcValue < 480 && gun_AdcValue >= 440)
+		{	controlLED (GREEN, 0xF8);	controlLED (RED, 0x00);	}
+		else if (gun_AdcValue < 440 && gun_AdcValue >= 400)
+		{	controlLED (GREEN, 0xFC);	controlLED (RED, 0x00);	}
+		else if (gun_AdcValue < 400 && gun_AdcValue >= 360)
+		{	controlLED (GREEN, 0xFE);	controlLED (RED, 0x00);	}
+		else if (gun_AdcValue < 360 && gun_AdcValue >= 320)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0x00);	}
+		else if (gun_AdcValue < 320 && gun_AdcValue >= 280)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0x80);	}
+		else if (gun_AdcValue < 280 && gun_AdcValue >= 240)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0xC0);	}	
+		else if (gun_AdcValue < 240 && gun_AdcValue >= 200)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0xE0);	}
+		else if (gun_AdcValue < 200 && gun_AdcValue >= 160)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0xF0);	}
+		else if (gun_AdcValue < 160 && gun_AdcValue >= 120)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0xF8);	}
+		else if (gun_AdcValue < 120 && gun_AdcValue >= 80)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0xFC);	}
+		else if (gun_AdcValue < 80 && gun_AdcValue >= 40)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0xFE);	}
+		else if (gun_AdcValue < 40 && gun_AdcValue >= 0)
+		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0xFF);	}
+		else
+		{	controlLED (GREEN, 0x00);	controlLED (RED, 0x00);	}//-------------------------^¼öÁ¤ºÎºÐ
+		
+
+
+
         //TODO:: Please write your application code 
 		wifiMain();
 		
 		if ( isElapsed())
 		{
-			sprintf(strTemp,"hello:%d CDS : %d\r\n",counter++,gun_AdcValue);		//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ 
+			sprintf(strTemp,"hello:%d CDS : %d\r\n",counter++, gun_AdcValue);		//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ 
 			wifiSendData(strTemp, strlen(strTemp));			//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ  
 			debugprint("TX:%s\r\n",strTemp);				//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ  
 		}
