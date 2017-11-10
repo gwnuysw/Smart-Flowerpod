@@ -12,6 +12,8 @@ Esp8266.c
 
 gpio.c
 
+sensor.c
+
 timer.c
 
 WifiTest.c

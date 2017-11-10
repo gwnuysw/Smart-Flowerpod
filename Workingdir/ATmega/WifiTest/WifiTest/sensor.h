@@ -5,7 +5,7 @@
  소스 설명 :
  1) 입출력 관련 헤더파일 선언
  2) Delay 관련 헤더파일 선언
- 3) 인터럽트 관련 헤더파일 선언
+ 3) 인터럽트 관련 헤더파일 선언                                                
  4) GPIO 관련 헤더파일을 선언
  5) TEMP 포트 및 핀 정의
  6) ACK/ NOACK 상수 값 정의
@@ -29,8 +29,8 @@
 #include "gpio.h"
 
 #define TEMP_PORT		F
-#define SCK		0
-#define DATA	1
+#define SCK		5
+#define DATA	2
 
 #define NOACK	0
 #define ACK   	1

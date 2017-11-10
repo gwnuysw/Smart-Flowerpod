@@ -15,6 +15,8 @@
 #include "timer.h"
 #include "CDSsensor.h"
 #include "adc.h"
+#include "humimain.h"
+#include "sensor.h"
 
 #define SERVER_IP_STR	"192.168.1.33"   //라즈베리파이 켜고 수정해야할 부분 
 #define SERVER_PORT		50001
@@ -23,6 +25,8 @@
 
 
 unsigned int gun_AdcValue = 0;
+volatile unsigned short temp;
+volatile unsigned short humi;
 extern int n_flag_getADC;//--------------^수정부분
 
 static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
@@ -111,9 +115,22 @@ int main(void)
 	
 	
     while(1)
-    {
+    {//TODO:: Please write your application code 
+		
+		temp = get_SHT11_data (TEMP);	// Sensing Temp
+	//	_delay_ms (100);
+		humi = get_SHT11_data (HUMI); 	// Sensing Humi
+	//	_delay_ms (100);
+	//	write_Command (0x02);		/* Cursor At Home, 84ms */
+	//	_delay_ms (9);
+	//	printValue (TEMP, temp);
+	//	write_Command (0xC0);		/* Move into 2nd Line */
+	//	_delay_us (220);
+	//	printValue (HUMI, humi);
+	//	_delay_ms (300);
 
-		if(n_flag_getADC == 1)			//---------------------------------v수정부분
+	
+		if(n_flag_getADC == 1)			//---------------------------------v조도 센서, led동작수정부분
 		{
 			n_flag_getADC = 0;
 			
@@ -161,12 +178,15 @@ int main(void)
 
 
 
-        //TODO:: Please write your application code 
+
+
+		//데이터 전송 부분
+        
 		wifiMain();
 		
 		if ( isElapsed())
 		{
-			sprintf(strTemp,"hello:%d CDS : %d\r\n",counter++, gun_AdcValue);		//가장 핵심적인 부분 
+			sprintf(strTemp,"hello:%d CDS : %d temp : %d humi : %d\r\n",counter++, gun_AdcValue, temp, humi);		//가장 핵심적인 부분 
 			wifiSendData(strTemp, strlen(strTemp));			//가장 핵심적인 부분  
 			debugprint("TX:%s\r\n",strTemp);				//가장 핵심적인 부분  
 		}

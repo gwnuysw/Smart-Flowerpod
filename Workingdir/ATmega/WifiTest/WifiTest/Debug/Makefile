@@ -40,6 +40,7 @@ C_SRCS +=  \
 ../debug.c \
 ../Esp8266.c \
 ../gpio.c \
+../sensor.c \
 ../timer.c \
 ../WifiTest.c
 
@@ -56,6 +57,7 @@ CDSsensor.o \
 debug.o \
 Esp8266.o \
 gpio.o \
+sensor.o \
 timer.o \
 WifiTest.o
 
@@ -66,6 +68,7 @@ CDSsensor.o \
 debug.o \
 Esp8266.o \
 gpio.o \
+sensor.o \
 timer.o \
 WifiTest.o
 
@@ -76,6 +79,7 @@ CDSsensor.d \
 debug.d \
 Esp8266.d \
 gpio.d \
+sensor.d \
 timer.d \
 WifiTest.d
 
@@ -86,6 +90,7 @@ CDSsensor.d \
 debug.d \
 Esp8266.d \
 gpio.d \
+sensor.d \
 timer.d \
 WifiTest.d
 
@@ -99,6 +104,8 @@ ADDITIONAL_DEPENDENCIES:=
 OUTPUT_FILE_DEP:= ./makedep.mk
 
 # AVR32/GNU C Compiler
+
+
 
 
 
