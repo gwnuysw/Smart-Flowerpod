@@ -28,13 +28,6 @@
 #include <avr/interrupt.h>
 #include "gpio.h"
 
-#define TEMP_PORT		F
-#define SCK		5
-#define DATA	2
-
-#define NOACK	0
-#define ACK   	1
-
 // SHT11 I2C Command
                             		// Addr	    Code(command)   r/w
 #define MEASURE_TEMP		0x03	// 000   	0001  			1

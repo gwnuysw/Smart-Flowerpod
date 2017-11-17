@@ -9,8 +9,8 @@
 #define MAX_LED_NUM		8
 
 /* LED PORT Define*/
-#define GREEN_PORT	K
-#define RED_PORT	C
+//#define GREEN_PORT	K
+//#define RED_PORT	C
 
 /* PORTF is used by ADC1 */
 
@@ -23,7 +23,7 @@ extern volatile uint8_t  flagOverflowSetTimer;
 
 //unsigned int gun_AdcValue	=	0;
 unsigned char guc_OverflowCnt	=	0;
-int n_flag_getADC = 0;
+unsigned int n_flag_getADC = 0;
 
 ISR (TIMER0_OVF_vect)	// Timer0 Overflow0 ISR
 {
@@ -48,7 +48,7 @@ ISR (TIMER0_OVF_vect)	// Timer0 Overflow0 ISR
 		n_flag_getADC = 1;
 	}
 }
-
+/*-----------------------------led 부분제거
 void TIMER_Init (void)
 {
 	
@@ -97,3 +97,4 @@ void controlLED (int color, unsigned char data)
 		}
 	}
 }		
+*/

@@ -4,7 +4,6 @@ volatile uint32_t timerCouter = 0;
 volatile uint32_t setTimerCheckCounter = 0;
 volatile uint8_t  flagOverflowSetTimer = 0;
   
-  
 void TIMER_100mSInit (void)
 {
 	// Timer/Count0 사용

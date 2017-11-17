@@ -27,6 +27,12 @@
 ********************************************************************/
 
 #include "sensor.h"
+#define TEMP_PORT		F
+#define SCK		0
+#define DATA	1
+
+#define NOACK	0
+#define ACK		1
 
 unsigned short val_temp, val_humi;
 unsigned short SHT11_humi, SHT11_temp;
