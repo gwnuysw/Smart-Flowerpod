@@ -48,7 +48,7 @@ ISR (TIMER0_OVF_vect)	// Timer0 Overflow0 ISR
 		n_flag_getADC = 1;
 	}
 }
-/*-----------------------------led 何盒力芭
+/*-----------------------------led 何盒力芭*/
 void TIMER_Init (void)
 {
 	
@@ -97,4 +97,3 @@ void controlLED (int color, unsigned char data)
 		}
 	}
 }		
-*/

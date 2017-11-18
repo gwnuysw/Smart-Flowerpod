@@ -40,6 +40,8 @@ static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
 int main(void)
 {
 	uint8_t strTemp[256];
+	unsigned char tempc, humic;   //변환된 온도 습도 저장 하는 변수
+	
 	debugInit();
 	wifiInit();
 	
@@ -105,22 +107,26 @@ int main(void)
 	debugprint("start Loop\r\n");	
 	
 	int counter = 0;
-/*----------------led부분제거
-	LED_Init ();		// PORTB = GREEN, PORTE = RED------------------------v수정 부분
+/*----------------led부분제거*/
+	LED_Init ();		// PORTB = GREEN, PORTE = RED------------------------v수정 부분 LED CDS 설정
 	AdcInit(1);			// PORTF = ADC1
 	TIMER_Init();
 		
-	sei();//-------------------------------------------^수정부분*/
+	sei();//-------------------------------------------^수정부분
 	
+	SHT11_Init();  //humi temp 설정
 	
     while(1)
     {//TODO:: Please write your application code 
 		
 		temp = get_SHT11_data (TEMP);	
+		
 		humi = get_SHT11_data (HUMI); 	
-	
-
-	/*--------led부분 제거
+		
+		tempc = printValue (TEMP, temp);
+		humic = printValue (HUMI, humi);
+		
+	/*--------led부분 제거*/
 		if(n_flag_getADC == 1)			//---------------------------------v조도 센서, led동작수정부분
 		{
 			n_flag_getADC = 0;
@@ -164,14 +170,14 @@ int main(void)
 		{	controlLED (GREEN, 0xFF);	controlLED (RED, 0xFF);	}
 		else
 		{	controlLED (GREEN, 0x00);	controlLED (RED, 0x00);	}//-------------------------^수정부분
-		*/
+		
 		//데이터 전송 부분
         
 		wifiMain();
 		
 		if ( isElapsed())
 		{
-			sprintf(strTemp,"hello:%d CDS : %d temp : %d humi : %d\n",counter++, gun_AdcValue, temp, humi);		//가장 핵심적인 부분 
+			sprintf(strTemp,"hello:%d CDS : %d temp : %d humi : %d\n",counter++, gun_AdcValue, tempc, humic);		//가장 핵심적인 부분 
 			wifiSendData(strTemp, strlen(strTemp));			//가장 핵심적인 부분  
 			debugprint("TX:%s\r\n",strTemp);				//가장 핵심적인 부분  
 		}

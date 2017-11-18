@@ -28,8 +28,8 @@
 
 #include "sensor.h"
 #define TEMP_PORT		F
-#define SCK		0
-#define DATA	1
+#define SCK		2
+#define DATA	5
 
 #define NOACK	0
 #define ACK		1
@@ -239,4 +239,17 @@ void calc_SHT11 (unsigned short humidity, unsigned short temperature)
 
 	val_temp	=	(unsigned short)(t_C*10);
 	val_humi	=	(unsigned short)(rh_true*10);
+}
+unsigned char printValue (unsigned char sense, unsigned short senseVal)  //humi temp 데이터 가공 함수
+{
+	unsigned char tens;
+	tens		=	senseVal / 10;			// 십의 자리 일의 자리
+	if (sense == TEMP)
+	{
+		return tens;
+	}
+	else if (sense == HUMI)
+	{
+		return tens;
+	}
 }
