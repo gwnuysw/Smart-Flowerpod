@@ -19,8 +19,8 @@
 
 #define SERVER_IP_STR	"192.168.1.33"   //라즈베리파이 켜고 수정해야할 부분 
 #define SERVER_PORT		50001
-//#define RED		0					
-//#define GREEN	1				
+#define RED		0					
+#define GREEN	1				
 
 
 unsigned int gun_AdcValue = 0;//-------------v수정부분

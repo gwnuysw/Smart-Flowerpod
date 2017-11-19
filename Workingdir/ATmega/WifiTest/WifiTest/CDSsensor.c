@@ -9,8 +9,8 @@
 #define MAX_LED_NUM		8
 
 /* LED PORT Define*/
-//#define GREEN_PORT	K
-//#define RED_PORT	C
+#define GREEN_PORT	K
+#define RED_PORT	C
 
 /* PORTF is used by ADC1 */
 
