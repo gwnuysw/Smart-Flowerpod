@@ -20,7 +20,7 @@
     <OverrideVtor>false</OverrideVtor>
     <OverrideVtorValue />
     <eraseonlaunchrule>0</eraseonlaunchrule>
-    <AsfVersion>2.9.0</AsfVersion>
+    <AsfVersion>2.11.1</AsfVersion>
     <avrtoolinterface />
     <avrtool>com.atmel.avrdbg.tool.ispmk2</avrtool>
     <com_atmel_avrdbg_tool_ispmk2>
@@ -136,6 +136,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sensor.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="soilpart.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="soilpart.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="timer.c">

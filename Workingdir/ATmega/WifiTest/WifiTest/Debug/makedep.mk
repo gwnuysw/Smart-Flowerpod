@@ -14,6 +14,8 @@ gpio.c
 
 sensor.c
 
+soilpart.c
+
 timer.c
 
 WifiTest.c
