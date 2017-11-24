@@ -9,13 +9,10 @@
 #define MAX_LED_NUM		8
 
 /* LED PORT Define*/
-#define GREEN_PORT	K
-#define RED_PORT	C
+
 
 /* PORTF is used by ADC1 */
 
-#define RED		0
-#define GREEN	1
 
 extern volatile uint32_t timerCouter;
 extern volatile uint32_t setTimerCheckCounter;
@@ -29,7 +26,7 @@ ISR (TIMER0_OVF_vect)	// Timer0 Overflow0 ISR
 {
 	cli();																	//----------------v 기능 복붙
 	// 0.01s에 오버플로우 발생, 1/(14745600Hz/1024)ⅹ144 = 0.01s
-	TCNT0	=	0xff - 144;
+	TCNT0	=	0xff - 45;
 
 	timerCouter++;
 	
@@ -42,7 +39,7 @@ ISR (TIMER0_OVF_vect)	// Timer0 Overflow0 ISR
 														//-------------------------------------^기능 복붙
 	guc_OverflowCnt++;
 
-	if (guc_OverflowCnt == 100)		// 0.003s * 100 = 0.3s
+	if (guc_OverflowCnt == 10)		// 0.003s * 100 = 0.3s
 	{
 		guc_OverflowCnt	=	0;
 		n_flag_getADC = 1;
@@ -58,42 +55,3 @@ void TIMER_Init (void)
 	TIMSK0	|=	1 << TOIE0;		
 	TIFR0	|=	1 << TOV0;	// set Overflow Interupt Flag
 }
-
-void LED_Init (void)
-{
-	int i = 0;
-	
-	for(i=0; i<MAX_LED_NUM; i++)
-	{
-		pinMode(RED_PORT, i, OUTPUT);
-		digitalWrite(RED_PORT, i, LOW);
-		pinMode(GREEN_PORT, i, OUTPUT);
-		digitalWrite(GREEN_PORT, i, LOW);
-	}
-}
-
-// color : RED(0), GREEN(1)
-void controlLED (int color, unsigned char data)
-{
-	int i = 0;
-	unsigned char nLedStatus = 0;
-	nLedStatus	=	data;
-	
-	for(i=0; i<MAX_LED_NUM; i++)
-	{
-		if((nLedStatus & (1<<i)))
-		{
-			if (color == RED)
-				digitalWrite(RED_PORT, i, HIGH);
-			else if (color == GREEN)
-				digitalWrite(GREEN_PORT, i, HIGH);
-		}
-		else
-		{
-			if (color == RED)
-				digitalWrite(RED_PORT, i, LOW);
-			else if (color == GREEN)
-				digitalWrite(GREEN_PORT, i, LOW);
-		}
-	}
-}		

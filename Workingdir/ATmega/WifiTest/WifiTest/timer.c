@@ -11,7 +11,7 @@ void TIMER_100mSInit (void)
 	TCCR0B	=	0x05;  //  fclk_io / 1024   
 	// 0.01s에 오버플로우 발생, 1/(14745600Hz/1024)ⅹ144 = 0.01s
 	// 오버플로우까지 카운트를 144로 설정
-	TCNT0	=	0xff - 144;
+	TCNT0	=	0xff - 45;
 	TIMSK0	|=	1 << TOIE0;	// Overflow Interupt Enable
 	TIFR0	|=	1 << TOV0;	// set Overflow Interupt Flag
 }
