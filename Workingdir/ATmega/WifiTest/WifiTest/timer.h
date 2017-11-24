@@ -10,4 +10,4 @@ void TIMER_100mSInit (void);
 void setElapsedTime100mSUnit(uint32_t Counter);
 uint8_t isElapsed();
 
-#endif // __TIMER_H__
+#endif  __TIMER_H__

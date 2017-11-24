@@ -650,16 +650,16 @@ LOAD c:/program files (x86)/atmel/atmel studio 6.0/extensions/atmel/avrgcc/3.4.1
  .debug_frame   0x000000ec       0x40 main.o
  .debug_frame   0x0000012c      0x1c4 sensor.o
 
-.debug_str      0x00000000      0x379
+.debug_str      0x00000000      0x360
  *(.debug_str)
- .debug_str     0x00000000       0xec gpio.o
-                                0x120 (size before relaxing)
- .debug_str     0x000000ec       0xd9 lcd.o
-                                0x1b9 (size before relaxing)
- .debug_str     0x000001c5       0x5a main.o
-                                0x1a5 (size before relaxing)
- .debug_str     0x0000021f      0x15a sensor.o
-                                0x25e (size before relaxing)
+ .debug_str     0x00000000       0xd3 gpio.o
+                                0x107 (size before relaxing)
+ .debug_str     0x000000d3       0xd9 lcd.o
+                                0x1a0 (size before relaxing)
+ .debug_str     0x000001ac       0x5a main.o
+                                0x18c (size before relaxing)
+ .debug_str     0x00000206      0x15a sensor.o
+                                0x245 (size before relaxing)
 
 .debug_loc      0x00000000     0x10d0
  *(.debug_loc)

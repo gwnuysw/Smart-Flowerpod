@@ -1,7 +1,7 @@
 /*
  * WifiTest.c
  *
- * Created: 2016-04-01 ì˜¤í›„ 5:43:33
+ * Created: 2016-04-01 ?¤í›„ 5:43:33
  *  Author: dogu
  */ 
 
@@ -13,10 +13,26 @@
 #include "debug.h"
 #include "Esp8266.h"
 #include "timer.h"
+#include "CDSsensor.h"
+#include "adc.h"
+#include "sensor.h"
+#include "soilpart.h"
+#define ON	1
+#define OFF	0
 
+#define CLOCKWISE	1			// CW
+#define COUNTERCLOCKWISE	0	// CCW
 
 #define SERVER_IP_STR	"192.168.1.33"   //¶óÁîº£¸®ÆÄÀÌ ÄÑ°í ¼öÁ¤ÇØ¾ßÇÒ ºÎºÐ 
 #define SERVER_PORT		50001
+			
+
+
+//-------------v¼öÁ¤ºÎºÐ
+unsigned int soil_gun_AdcValue = 0;
+volatile unsigned short temp;
+volatile unsigned short humi;
+extern int n_flag_getADC;//--------------^¼öÁ¤ºÎºÐ
 
 static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
 {
@@ -30,6 +46,8 @@ static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
 int main(void)
 {
 	uint8_t strTemp[256];
+	unsigned char tempc, humic;   //º¯È¯µÈ ¿Âµµ ½Àµµ ÀúÀå ÇÏ´Â º¯¼ö
+	
 	debugInit();
 	wifiInit();
 	
@@ -60,7 +78,7 @@ int main(void)
 	
 	// connect  AP 
 	debugprint("\r\n");
-	if ( !wifiConnectAP("301", "gwnucomse"))
+	if ( !wifiConnectAP("CSNET-301", "gwnucomse"))
 	{
 		debugprint("AP connected.\r\n");
 	}
@@ -86,22 +104,72 @@ int main(void)
 	
 	// Send Test message 
 	strcpy(strTemp,"test msessage: hello\r\n");
-	wifiSendData(strTemp, sizeof("test msessage: hello\r\n"));
+//	wifiSendData(strTemp, sizeof("test msessage: hello\r\n"));
 	
 	 //¿©±â¼­ºÎÅÍ ½ÇÁ¦ µ¥ÀÌÅÍ°¡ °¡°øµÈ´Ù. 
 	TIMER_100mSInit ();
 	setElapsedTime100mSUnit(100);
 
 	debugprint("start Loop\r\n");	
+	
 	int counter = 0;
+/*----------------ledºÎºÐÁ¦°Å*/
+	debugInit();
+
+	AdcInit(0);			// PORTF = ADC0   Åä¾ç¼öºÐ
+	TIMER_Init();
+		
+	sei();//-------------------------------------------^¼öÁ¤ºÎºÐ
+	
+	SHT11_Init();  //humi temp ¼³Á¤
+	
     while(1)
-    {
-        //TODO:: Please write your application code 
+    {//TODO:: Please write your application code 
+		
+		temp = get_SHT11_data (TEMP);	
+		
+		humi = get_SHT11_data (HUMI); 	
+		
+		tempc = printValue (TEMP, temp);
+		humic = printValue (HUMI, humi);
+		
+	/*--------ledºÎºÐ Á¦°Å*/
+		if(n_flag_getADC == 1)			//---------------------------------vÁ¶µµ ¼¾¼­, ledµ¿ÀÛ¼öÁ¤ºÎºÐ
+		{
+			n_flag_getADC = 0;
+			
+			soil_gun_AdcValue	=	AdcRead();
+		//	debugprint("soil_gun_AdcValue : %d\r\n", soil_gun_AdcValue);
+		}
+		
+		
+		
+		
+		
+		if(soil_gun_AdcValue<=30) {//----------------------------soil value
+			Motor_Action(ON, COUNTERCLOCKWISE);
+			_delay_ms(1000);
+
+			Motor_Action(OFF, COUNTERCLOCKWISE);
+			_delay_ms(15000);
+			
+			
+			Motor_Action(ON, CLOCKWISE);
+			_delay_ms(1000);
+				
+			Motor_Action(OFF, CLOCKWISE);
+			
+		//	_delay_ms(10000);
+		}
+		
+		
+        
 		wifiMain();
 		
 		if ( isElapsed())
 		{
-			sprintf(strTemp,"hello:%d\r\n",counter++);		//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ 
+			sprintf(strTemp,"soil : %d temp : %d humi : %d \n", soil_gun_AdcValue, tempc, humic);		//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ 
+			//sprintf(strTemp,"CDS : %d temp : %d humi : %d soil : %d \n", cds_gun_AdcValue, tempc, humic, soil_gun_AdcValue);		//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ 
 			wifiSendData(strTemp, strlen(strTemp));			//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ  
 			debugprint("TX:%s\r\n",strTemp);				//°¡Àå ÇÙ½ÉÀûÀÎ ºÎºÐ  
 		}

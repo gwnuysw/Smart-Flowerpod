@@ -35,8 +35,13 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../adc.c \
+../CDSsensor.c \
 ../debug.c \
 ../Esp8266.c \
+../gpio.c \
+../sensor.c \
+../soilpart.c \
 ../timer.c \
 ../WifiTest.c
 
@@ -48,29 +53,49 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+adc.o \
+CDSsensor.o \
 debug.o \
 Esp8266.o \
+gpio.o \
+sensor.o \
+soilpart.o \
 timer.o \
 WifiTest.o
 
 
 OBJS_AS_ARGS +=  \
+adc.o \
+CDSsensor.o \
 debug.o \
 Esp8266.o \
+gpio.o \
+sensor.o \
+soilpart.o \
 timer.o \
 WifiTest.o
 
 
 C_DEPS +=  \
+adc.d \
+CDSsensor.d \
 debug.d \
 Esp8266.d \
+gpio.d \
+sensor.d \
+soilpart.d \
 timer.d \
 WifiTest.d
 
 
 C_DEPS_AS_ARGS +=  \
+adc.d \
+CDSsensor.d \
 debug.d \
 Esp8266.d \
+gpio.d \
+sensor.d \
+soilpart.d \
 timer.d \
 WifiTest.d
 
@@ -84,6 +109,16 @@ ADDITIONAL_DEPENDENCIES:=
 OUTPUT_FILE_DEP:= ./makedep.mk
 
 # AVR32/GNU C Compiler
+
+
+
+
+
+
+
+
+
+
 
 
 
