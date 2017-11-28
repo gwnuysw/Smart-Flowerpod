@@ -1,5 +1,5 @@
 # RasPiPod
-gwnu 2nd grade raspberrypi project
+gwnu 2nd grade raspberrypi project.
 this device is based on raspberrypi and atmega2560 controlboard.
 FlowerPod envirenment is watched by sensers.
 atmega2560 controlboard gets Humi, temp, soli moisture data and control AC motor to give water on soil envirenment .
