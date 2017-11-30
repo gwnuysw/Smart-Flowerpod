@@ -6,3 +6,4 @@ atmega2560 controlboard gets Humi, temp, soli moisture data so control AC motor 
 The data that atmega2560 gained send to raspberrypi using wifi AP comunication.
 raspberrypi and atmega2560 controlboard share same wifi AP.
 raspberrypi write received Humi, temp, soil moisture data on *.txt file.
+
