@@ -150,20 +150,27 @@ int main(void)
 		//	debugprint("soil_gun_AdcValue : %d\r\n", soil_gun_AdcValue);
 		}
 		
+		Motor_Action(ON, COUNTERCLOCKWISE);
+		
 		if(soil_gun_AdcValue<=30) {//----------------------------soil value
+			
+			Motor_Action(ON, CLOCKWISE);
+			_delay_ms(250);
+			
+			Motor_Action(OFF, CLOCKWISE);
+			_delay_ms(15000);
+			
+			
+	/*		Motor_Action(OFF, CLOCKWISE);
+			_delay_ms(15000);
+			
 			Motor_Action(ON, COUNTERCLOCKWISE);
 			_delay_ms(500);
 
 			Motor_Action(OFF, COUNTERCLOCKWISE);
 			_delay_ms(15000);
 			
-			
-			Motor_Action(ON, CLOCKWISE);
-			_delay_ms(500);
-				
-			Motor_Action(OFF, CLOCKWISE);
-			
-		//	_delay_ms(10000);
+		//	_delay_ms(10000);*/
 		}
 		
 		wifiMain();
