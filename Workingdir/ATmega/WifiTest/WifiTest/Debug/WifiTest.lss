@@ -19,7 +19,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 00000f35  00000000  00000000  000086e5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000015ed  00000000  00000000  0000961a  2**0
+  8 .debug_line   000015eb  00000000  00000000  0000961a  2**0
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000988  00000000  00000000  0000ac08  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -5553,8 +5553,11 @@ int main(void)
     1ef4:	92 83       	std	Z+2, r25	; 0x02
     1ef6:	81 83       	std	Z+1, r24	; 0x01
     1ef8:	0e 94 64 01 	call	0x2c8	; 0x2c8 <debugprint>
-
-	// TCP remote server connection
+		debugprint("Server connection fail.\r\n");
+		
+	}
+	debugprint("Connected Server.\r\n");*/
+	
 	if( !wifiConnectTCPServer(SERVER_IP_STR,SERVER_PORT))
     1efc:	0f 90       	pop	r0
     1efe:	0f 90       	pop	r0
@@ -5599,6 +5602,7 @@ int main(void)
     1f46:	0f 90       	pop	r0
     1f48:	0f 90       	pop	r0
 	}				
+
 	debugprint("\r\n");
     1f4a:	0f 92       	push	r0
     1f4c:	0f 92       	push	r0
@@ -5666,7 +5670,7 @@ int main(void)
 	
 	SHT11_Init();  //humi temp ¼³Á¤
     1fb0:	0e 94 60 0c 	call	0x18c0	; 0x18c0 <SHT11_Init>
-        
+		
 		wifiMain();
 		
 		if ( isElapsed())
@@ -5737,10 +5741,8 @@ int main(void)
     2026:	0e 94 a1 00 	call	0x142	; 0x142 <AdcRead>
     202a:	90 93 5e 04 	sts	0x045E, r25
     202e:	80 93 5d 04 	sts	0x045D, r24
-		
-		
-		
-		
+		//	debugprint("soil_gun_AdcValue : %d\r\n", soil_gun_AdcValue);
+		}
 		
 		if(soil_gun_AdcValue<=30) {//----------------------------soil value
     2032:	80 91 5d 04 	lds	r24, 0x045D
@@ -5755,15 +5757,15 @@ int main(void)
     2046:	70 e0       	ldi	r23, 0x00	; 0
     2048:	0e 94 84 0e 	call	0x1d08	; 0x1d08 <Motor_Action>
     204c:	8f ef       	ldi	r24, 0xFF	; 255
-    204e:	9f ef       	ldi	r25, 0xFF	; 255
-    2050:	ac e2       	ldi	r26, 0x2C	; 44
+    204e:	9f e7       	ldi	r25, 0x7F	; 127
+    2050:	a6 e1       	ldi	r26, 0x16	; 22
     2052:	81 50       	subi	r24, 0x01	; 1
     2054:	90 40       	sbci	r25, 0x00	; 0
     2056:	a0 40       	sbci	r26, 0x00	; 0
     2058:	e1 f7       	brne	.-8      	; 0x2052 <main+0x27a>
     205a:	00 c0       	rjmp	.+0      	; 0x205c <main+0x284>
     205c:	00 00       	nop
-			_delay_ms(1000);
+			_delay_ms(500);
 
 			Motor_Action(OFF, COUNTERCLOCKWISE);
     205e:	80 e0       	ldi	r24, 0x00	; 0
@@ -5792,15 +5794,15 @@ int main(void)
     2086:	70 e0       	ldi	r23, 0x00	; 0
     2088:	0e 94 84 0e 	call	0x1d08	; 0x1d08 <Motor_Action>
     208c:	8f ef       	ldi	r24, 0xFF	; 255
-    208e:	9f ef       	ldi	r25, 0xFF	; 255
-    2090:	ac e2       	ldi	r26, 0x2C	; 44
+    208e:	9f e7       	ldi	r25, 0x7F	; 127
+    2090:	a6 e1       	ldi	r26, 0x16	; 22
     2092:	81 50       	subi	r24, 0x01	; 1
     2094:	90 40       	sbci	r25, 0x00	; 0
     2096:	a0 40       	sbci	r26, 0x00	; 0
     2098:	e1 f7       	brne	.-8      	; 0x2092 <main+0x2ba>
     209a:	00 c0       	rjmp	.+0      	; 0x209c <main+0x2c4>
     209c:	00 00       	nop
-			_delay_ms(1000);
+			_delay_ms(500);
 				
 			Motor_Action(OFF, CLOCKWISE);
     209e:	80 e0       	ldi	r24, 0x00	; 0
@@ -5808,11 +5810,10 @@ int main(void)
     20a2:	61 e0       	ldi	r22, 0x01	; 1
     20a4:	70 e0       	ldi	r23, 0x00	; 0
     20a6:	0e 94 84 0e 	call	0x1d08	; 0x1d08 <Motor_Action>
+			
 		//	_delay_ms(10000);
 		}
 		
-		
-        
 		wifiMain();
     20aa:	0e 94 e7 04 	call	0x9ce	; 0x9ce <wifiMain>
 		

@@ -23,7 +23,7 @@
 #define CLOCKWISE	1			// CW
 #define COUNTERCLOCKWISE	0	// CCW
 
-#define SERVER_IP_STR	"192.168.1.33"   //라즈베리파이 켜고 수정해야할 부분 
+#define SERVER_IP_STR	"192.168.1.42"   //라즈베리파이 켜고 수정해야할 부분 
 #define SERVER_PORT		50001
 			
 
@@ -92,6 +92,13 @@ int main(void)
 	debugprint("\r\n");
 
 	// TCP remote server connection
+/*	while(wifiConnectTCPServer(SERVER_IP_STR,SERVER_PORT))
+	{
+		debugprint("Server connection fail.\r\n");
+		
+	}
+	debugprint("Connected Server.\r\n");*/
+	
 	if( !wifiConnectTCPServer(SERVER_IP_STR,SERVER_PORT))
 	{
 		debugprint("Connected Server.\r\n");
@@ -100,6 +107,7 @@ int main(void)
 	{
 		debugprint("Server connection fail.\r\n");
 	}				
+
 	debugprint("\r\n");
 	
 	// Send Test message 
@@ -142,28 +150,22 @@ int main(void)
 		//	debugprint("soil_gun_AdcValue : %d\r\n", soil_gun_AdcValue);
 		}
 		
-		
-		
-		
-		
 		if(soil_gun_AdcValue<=30) {//----------------------------soil value
 			Motor_Action(ON, COUNTERCLOCKWISE);
-			_delay_ms(1000);
+			_delay_ms(500);
 
 			Motor_Action(OFF, COUNTERCLOCKWISE);
 			_delay_ms(15000);
 			
 			
 			Motor_Action(ON, CLOCKWISE);
-			_delay_ms(1000);
+			_delay_ms(500);
 				
 			Motor_Action(OFF, CLOCKWISE);
 			
 		//	_delay_ms(10000);
 		}
 		
-		
-        
 		wifiMain();
 		
 		if ( isElapsed())

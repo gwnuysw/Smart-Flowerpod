@@ -15,7 +15,7 @@
 #include "timer.h"
 
 
-#define SERVER_IP_STR	"192.168.10.227"
+#define SERVER_IP_STR	"192.168.1.42"
 #define SERVER_PORT		50001
 
 static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
@@ -60,7 +60,7 @@ int main(void)
 	
 	// connect  AP 
 	debugprint("\r\n");
-	if ( !wifiConnectAP("CNDI_AES", "cndi313182246"))
+	if ( !wifiConnectAP("CSNET-301", "gwnucomse"))
 	{
 		debugprint("AP connected.\r\n");
 	}

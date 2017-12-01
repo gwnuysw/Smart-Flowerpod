@@ -3,15 +3,15 @@ WifiTest.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         0000023a  00800200  00001a72  00001b06  2**0
+  0 .data         00000234  00800200  00001a72  00001b06  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         00001a72  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000652  0080043a  0080043a  00001d40  2**0
+  2 .bss          00000652  00800434  00800434  00001d3a  2**0
                   ALLOC
-  3 .stab         00000fcc  00000000  00000000  00001d40  2**2
+  3 .stab         00000fcc  00000000  00000000  00001d3c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      0000033a  00000000  00000000  00002d0c  2**0
+  4 .stabstr      0000033a  00000000  00000000  00002d08  2**0
                   CONTENTS, READONLY, DEBUGGING
   5 .debug_aranges 00000160  00000000  00000000  00003048  2**3
                   CONTENTS, READONLY, DEBUGGING
@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  000006f4  00000000  00000000  00006890  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000705  00000000  00000000  00006f84  2**0
+ 10 .debug_str    00000768  00000000  00000000  00006f84  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00001866  00000000  00000000  00007689  2**0
+ 11 .debug_loc    00001866  00000000  00000000  000076ec  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000e0  00000000  00000000  00008eef  2**0
+ 12 .debug_ranges 000000e0  00000000  00000000  00008f52  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -112,14 +112,14 @@ Disassembly of section .text:
      102:	02 c0       	rjmp	.+4      	; 0x108 <__do_copy_data+0x14>
      104:	07 90       	elpm	r0, Z+
      106:	0d 92       	st	X+, r0
-     108:	aa 33       	cpi	r26, 0x3A	; 58
+     108:	a4 33       	cpi	r26, 0x34	; 52
      10a:	b1 07       	cpc	r27, r17
      10c:	d9 f7       	brne	.-10     	; 0x104 <__do_copy_data+0x10>
      10e:	1b be       	out	0x3b, r1	; 59
 
 00000110 <__do_clear_bss>:
      110:	1a e0       	ldi	r17, 0x0A	; 10
-     112:	aa e3       	ldi	r26, 0x3A	; 58
+     112:	a4 e3       	ldi	r26, 0x34	; 52
      114:	b4 e0       	ldi	r27, 0x04	; 4
      116:	01 c0       	rjmp	.+2      	; 0x11a <.do_clear_bss_start>
 
@@ -127,7 +127,7 @@ Disassembly of section .text:
      118:	1d 92       	st	X+, r1
 
 0000011a <.do_clear_bss_start>:
-     11a:	ac 38       	cpi	r26, 0x8C	; 140
+     11a:	a6 38       	cpi	r26, 0x86	; 134
      11c:	b1 07       	cpc	r27, r17
      11e:	e1 f7       	brne	.-8      	; 0x118 <.do_clear_bss_loop>
      120:	0e 94 bd 08 	call	0x117a	; 0x117a <main>
@@ -137,26 +137,15 @@ Disassembly of section .text:
      128:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000012c <putCh2>:
-volatile unsigned char g_debugRxData[MAX_DEBUG_RX_DATA]; // Rx buff
-volatile unsigned char g_debugRxCurrentIndex = 0;       // Rx buffer index
-
-void putCh2(char ch)
-{
-	while (!(UCSR2A & 0x20));
      12c:	e0 ed       	ldi	r30, 0xD0	; 208
      12e:	f0 e0       	ldi	r31, 0x00	; 0
      130:	90 81       	ld	r25, Z
      132:	95 ff       	sbrs	r25, 5
      134:	fd cf       	rjmp	.-6      	; 0x130 <putCh2+0x4>
-		UDR2= ch;
      136:	80 93 d6 00 	sts	0x00D6, r24
-}
      13a:	08 95       	ret
 
 0000013c <__vector_51>:
-
-ISR(USART2_RX_vect)
-{
      13c:	1f 92       	push	r1
      13e:	0f 92       	push	r0
      140:	0f b6       	in	r0, 0x3f	; 63
@@ -168,25 +157,20 @@ ISR(USART2_RX_vect)
      14c:	9f 93       	push	r25
      14e:	ef 93       	push	r30
      150:	ff 93       	push	r31
-	g_debugRxData[g_debugRxCurrentIndex] = UDR2;
-     152:	90 91 3a 04 	lds	r25, 0x043A
+     152:	90 91 34 04 	lds	r25, 0x0434
      156:	80 91 d6 00 	lds	r24, 0x00D6
-     15a:	ea e4       	ldi	r30, 0x4A	; 74
+     15a:	e4 e4       	ldi	r30, 0x44	; 68
      15c:	f4 e0       	ldi	r31, 0x04	; 4
      15e:	e9 0f       	add	r30, r25
      160:	f1 1d       	adc	r31, r1
      162:	80 83       	st	Z, r24
-	g_debugRxCurrentIndex++;
-     164:	80 91 3a 04 	lds	r24, 0x043A
+     164:	80 91 34 04 	lds	r24, 0x0434
      168:	8f 5f       	subi	r24, 0xFF	; 255
-     16a:	80 93 3a 04 	sts	0x043A, r24
-	if(g_debugRxCurrentIndex >= MAX_DEBUG_RX_DATA)
-     16e:	80 91 3a 04 	lds	r24, 0x043A
+     16a:	80 93 34 04 	sts	0x0434, r24
+     16e:	80 91 34 04 	lds	r24, 0x0434
      172:	80 34       	cpi	r24, 0x40	; 64
      174:	10 f0       	brcs	.+4      	; 0x17a <__vector_51+0x3e>
-		g_debugRxCurrentIndex = 0;
-     176:	10 92 3a 04 	sts	0x043A, r1
-}
+     176:	10 92 34 04 	sts	0x0434, r1
      17a:	ff 91       	pop	r31
      17c:	ef 91       	pop	r30
      17e:	9f 91       	pop	r25
@@ -200,52 +184,26 @@ ISR(USART2_RX_vect)
      18e:	18 95       	reti
 
 00000190 <debugInit>:
-#define BAUD_RATE 115200L
-void debugInit()
-{
-	// USART2 use
-	// PH0 => RX, PH1 => TX
-	DDRH  &= 0xFC;										// "0" input, "1" output
      190:	e1 e0       	ldi	r30, 0x01	; 1
      192:	f1 e0       	ldi	r31, 0x01	; 1
      194:	80 81       	ld	r24, Z
      196:	8c 7f       	andi	r24, 0xFC	; 252
      198:	80 83       	st	Z, r24
-	PORTH |= 0x00;
      19a:	e2 e0       	ldi	r30, 0x02	; 2
      19c:	f1 e0       	ldi	r31, 0x01	; 1
      19e:	80 81       	ld	r24, Z
      1a0:	80 83       	st	Z, r24
-	
-	// Not Double mode, Not multi_communication
-	UCSR2A = 0x00;								// x2 Mode
      1a2:	10 92 d0 00 	sts	0x00D0, r1
-	UCSR2B = 0x98;
      1a6:	88 e9       	ldi	r24, 0x98	; 152
      1a8:	80 93 d1 00 	sts	0x00D1, r24
-	UCSR2C = 0x06;
      1ac:	86 e0       	ldi	r24, 0x06	; 6
      1ae:	80 93 d2 00 	sts	0x00D2, r24
-	//	UBRR0L = 0x3F;	// 0b00110011, (14745600 / (16 * 14400)) - 1 = 0x40
-	//	UBRR0L = 0x2F;	// 0b00110011, (14745600 / (16 * 19200)) - 1 = 0x2F
-	//	UBRR0L = 0x17;	// 0b00110011, (14745600 / (16 * 38400)) - 1 = 0x17
-	//	UBRR0L = 0x0F;	// 0b00110011, (14745600 / (16 * 57600)) - 1 = 0x0F
-
-	UBRR2H=(unsigned char) (baud >>8);                            // baud ?????? ??????  H???????? ????
      1b2:	10 92 d5 00 	sts	0x00D5, r1
-	UBRR2L=(unsigned char) (baud & 0xFF);                         // baud ?????? ??????  L???????  ????
      1b6:	87 e0       	ldi	r24, 0x07	; 7
      1b8:	80 93 d4 00 	sts	0x00D4, r24
-	
-	//	UBRR2H = 0x00;
-	//	UBRR2L = 16;								// 115200
-}
      1bc:	08 95       	ret
 
 000001be <debugprint>:
-
-void debugprint(const char *fmt,...)
-{
      1be:	0f 93       	push	r16
      1c0:	1f 93       	push	r17
      1c2:	cf 93       	push	r28
@@ -264,40 +222,23 @@ void debugprint(const char *fmt,...)
      1dc:	ff 4f       	sbci	r31, 0xFF	; 255
      1de:	61 91       	ld	r22, Z+
      1e0:	71 91       	ld	r23, Z+
-	va_list ap;
-	char s[128];
-	char *p_char = s;
-	va_start(ap, fmt);
-	vsprintf(s, fmt,ap);
      1e2:	ce 01       	movw	r24, r28
      1e4:	01 96       	adiw	r24, 0x01	; 1
      1e6:	4e 2f       	mov	r20, r30
      1e8:	5f 2f       	mov	r21, r31
      1ea:	0e 94 67 0a 	call	0x14ce	; 0x14ce <vsprintf>
-	va_end(ap);
-	while(0 != *p_char){
      1ee:	89 81       	ldd	r24, Y+1	; 0x01
      1f0:	88 23       	and	r24, r24
      1f2:	51 f0       	breq	.+20     	; 0x208 <debugprint+0x4a>
      1f4:	8e 01       	movw	r16, r28
      1f6:	0e 5f       	subi	r16, 0xFE	; 254
      1f8:	1f 4f       	sbci	r17, 0xFF	; 255
-		putCh2(*p_char++);
      1fa:	0e 94 96 00 	call	0x12c	; 0x12c <putCh2>
-	char s[128];
-	char *p_char = s;
-	va_start(ap, fmt);
-	vsprintf(s, fmt,ap);
-	va_end(ap);
-	while(0 != *p_char){
      1fe:	f8 01       	movw	r30, r16
      200:	81 91       	ld	r24, Z+
      202:	8f 01       	movw	r16, r30
      204:	88 23       	and	r24, r24
      206:	c9 f7       	brne	.-14     	; 0x1fa <debugprint+0x3c>
-		putCh2(*p_char++);
-	}	
-}
      208:	c0 58       	subi	r28, 0x80	; 128
      20a:	df 4f       	sbci	r29, 0xFF	; 255
      20c:	0f b6       	in	r0, 0x3f	; 63
@@ -312,57 +253,33 @@ void debugprint(const char *fmt,...)
      21e:	08 95       	ret
 
 00000220 <debugConsoleMain>:
-
-void debugConsoleMain()
-{
-	int i;
-
-	if ( !g_debugRxCurrentIndex ) 
-     220:	80 91 3a 04 	lds	r24, 0x043A
+     220:	80 91 34 04 	lds	r24, 0x0434
      224:	88 23       	and	r24, r24
      226:	79 f0       	breq	.+30     	; 0x246 <debugConsoleMain+0x26>
-		return;
-	
-	for(i = 0; i <g_debugRxCurrentIndex;i++)
-     228:	80 91 3a 04 	lds	r24, 0x043A
+     228:	80 91 34 04 	lds	r24, 0x0434
      22c:	88 23       	and	r24, r24
      22e:	49 f0       	breq	.+18     	; 0x242 <debugConsoleMain+0x22>
      230:	80 e0       	ldi	r24, 0x00	; 0
      232:	90 e0       	ldi	r25, 0x00	; 0
      234:	01 96       	adiw	r24, 0x01	; 1
-     236:	20 91 3a 04 	lds	r18, 0x043A
+     236:	20 91 34 04 	lds	r18, 0x0434
      23a:	30 e0       	ldi	r19, 0x00	; 0
      23c:	82 17       	cp	r24, r18
      23e:	93 07       	cpc	r25, r19
      240:	cc f3       	brlt	.-14     	; 0x234 <debugConsoleMain+0x14>
-	{
-
-	}
-	g_debugRxCurrentIndex = 0;
-     242:	10 92 3a 04 	sts	0x043A, r1
+     242:	10 92 34 04 	sts	0x0434, r1
      246:	08 95       	ret
 
 00000248 <putCh0>:
-volatile int g_rxDataLen = 0;
-volatile uint8_t g_rxDataBuff[MAX_WIFI_RX_DATA];
-
-void putCh0(char ch)
-{
-	while (!(UCSR0A & 0x20));
      248:	e0 ec       	ldi	r30, 0xC0	; 192
      24a:	f0 e0       	ldi	r31, 0x00	; 0
      24c:	90 81       	ld	r25, Z
      24e:	95 ff       	sbrs	r25, 5
      250:	fd cf       	rjmp	.-6      	; 0x24c <putCh0+0x4>
-	UDR0= ch;
      252:	80 93 c6 00 	sts	0x00C6, r24
-}
      256:	08 95       	ret
 
 00000258 <__vector_25>:
-
-ISR(USART0_RX_vect)
-{
      258:	1f 92       	push	r1
      25a:	0f 92       	push	r0
      25c:	0f b6       	in	r0, 0x3f	; 63
@@ -374,22 +291,17 @@ ISR(USART0_RX_vect)
      268:	9f 93       	push	r25
      26a:	ef 93       	push	r30
      26c:	ff 93       	push	r31
-	g_wifiRxData[g_wifiRxCurrentIndex] = UDR0;
-     26e:	90 91 40 04 	lds	r25, 0x0440
+     26e:	90 91 3a 04 	lds	r25, 0x043A
      272:	80 91 c6 00 	lds	r24, 0x00C6
-     276:	ea e8       	ldi	r30, 0x8A	; 138
+     276:	e4 e8       	ldi	r30, 0x84	; 132
      278:	f6 e0       	ldi	r31, 0x06	; 6
      27a:	e9 0f       	add	r30, r25
      27c:	f1 1d       	adc	r31, r1
      27e:	80 83       	st	Z, r24
-	g_wifiRxCurrentIndex++;
-     280:	80 91 40 04 	lds	r24, 0x0440
+     280:	80 91 3a 04 	lds	r24, 0x043A
      284:	8f 5f       	subi	r24, 0xFF	; 255
-     286:	80 93 40 04 	sts	0x0440, r24
-	if(g_wifiRxCurrentIndex >= MAX_WIFI_RX_DATA)
-     28a:	80 91 40 04 	lds	r24, 0x0440
-	g_wifiRxCurrentIndex = 0;
-}
+     286:	80 93 3a 04 	sts	0x043A, r24
+     28a:	80 91 3a 04 	lds	r24, 0x043A
      28e:	ff 91       	pop	r31
      290:	ef 91       	pop	r30
      292:	9f 91       	pop	r25
@@ -403,13 +315,7 @@ ISR(USART0_RX_vect)
      2a2:	18 95       	reti
 
 000002a4 <wifiAndBTModuleReset>:
-
-void wifiAndBTModuleReset()
-{
-	// MOD_RESET(PD6) (wifi module and  BT module reset )  => bt + wifi  reset
-	DDRD  &= 0xBF; // input										// "0" input, "1" output
      2a4:	56 98       	cbi	0x0a, 6	; 10
-	PORTD &= 0xBF; // low
      2a6:	5e 98       	cbi	0x0b, 6	; 11
 	#else
 		//round up by default
@@ -425,9 +331,6 @@ void wifiAndBTModuleReset()
      2b2:	a0 40       	sbci	r26, 0x00	; 0
      2b4:	e1 f7       	brne	.-8      	; 0x2ae <wifiAndBTModuleReset+0xa>
      2b6:	00 00       	nop
-	
-	_delay_ms(30);
-	DDRD  |= 0x40; // output
      2b8:	56 9a       	sbi	0x0a, 6	; 10
      2ba:	8f ef       	ldi	r24, 0xFF	; 255
      2bc:	9f e3       	ldi	r25, 0x3F	; 63
@@ -438,10 +341,7 @@ void wifiAndBTModuleReset()
      2c6:	e1 f7       	brne	.-8      	; 0x2c0 <wifiAndBTModuleReset+0x1c>
      2c8:	00 c0       	rjmp	.+0      	; 0x2ca <wifiAndBTModuleReset+0x26>
      2ca:	00 00       	nop
-	_delay_ms(50);
-	DDRD  &= 0xBF; // input
      2cc:	56 98       	cbi	0x0a, 6	; 10
-	PORTD |= 0x40; // high
      2ce:	5e 9a       	sbi	0x0b, 6	; 11
      2d0:	8f ef       	ldi	r24, 0xFF	; 255
      2d2:	9f ef       	ldi	r25, 0xFF	; 255
@@ -452,26 +352,13 @@ void wifiAndBTModuleReset()
      2dc:	e1 f7       	brne	.-8      	; 0x2d6 <wifiAndBTModuleReset+0x32>
      2de:	00 c0       	rjmp	.+0      	; 0x2e0 <wifiAndBTModuleReset+0x3c>
      2e0:	00 00       	nop
-	
-	_delay_ms(2000);
-}
      2e2:	08 95       	ret
 
 000002e4 <wifiEnable>:
-
-void wifiEnable(uint8_t bEnable)
-{
-	if ( bEnable)
      2e4:	88 23       	and	r24, r24
      2e6:	11 f0       	breq	.+4      	; 0x2ec <wifiEnable+0x8>
-	{
-		PORTD |= 0x80;  // high output
      2e8:	5f 9a       	sbi	0x0b, 7	; 11
      2ea:	01 c0       	rjmp	.+2      	; 0x2ee <wifiEnable+0xa>
-	}
-	else
-	{
-		PORTD &= 0x7F;  // low output
      2ec:	5f 98       	cbi	0x0b, 7	; 11
      2ee:	8f ef       	ldi	r24, 0xFF	; 255
      2f0:	9f ef       	ldi	r25, 0xFF	; 255
@@ -482,54 +369,24 @@ void wifiEnable(uint8_t bEnable)
      2fa:	e1 f7       	brne	.-8      	; 0x2f4 <wifiEnable+0x10>
      2fc:	00 c0       	rjmp	.+0      	; 0x2fe <wifiEnable+0x1a>
      2fe:	00 00       	nop
-	}
-	_delay_ms(200);
-	
-}
      300:	08 95       	ret
 
 00000302 <wifiInit>:
-#define BAUD_RATE_WIFI 115200L
-void wifiInit()
-{
-	// USART0 use
-	// PE0 => RX, PE1 => TX
-	DDRE  &= 0xFC;										// "0" input, "1" output
      302:	8d b1       	in	r24, 0x0d	; 13
      304:	8c 7f       	andi	r24, 0xFC	; 252
      306:	8d b9       	out	0x0d, r24	; 13
-	PORTE |= 0x00;
      308:	8e b1       	in	r24, 0x0e	; 14
      30a:	8e b9       	out	0x0e, r24	; 14
-	
-	// Not Double mode, Not multi_communication
-	UCSR0A = 0x00;								// x2 Mode
      30c:	10 92 c0 00 	sts	0x00C0, r1
-	UCSR0B = 0x98;
      310:	88 e9       	ldi	r24, 0x98	; 152
      312:	80 93 c1 00 	sts	0x00C1, r24
-	UCSR0C = 0x06;
      316:	86 e0       	ldi	r24, 0x06	; 6
      318:	80 93 c2 00 	sts	0x00C2, r24
-	//	UBRR0L = 16;								// 115200
-	
-	unsigned int baud=1;   									// ??? baud???? "1"?? ????
-	baud = ((F_CPU+(BAUD_RATE_WIFI*8L))/(BAUD_RATE_WIFI*16L)-1);      // baud?? ???�֬�?????? ????
-	
-	UBRR0H=(unsigned char) (baud >>8);                            // baud ?????? ??????  H???????? ????
      31c:	10 92 c5 00 	sts	0x00C5, r1
-	UBRR0L=(unsigned char) (baud & 0xFF);                         // baud ?????? ??????  L???????  ????
      320:	87 e0       	ldi	r24, 0x07	; 7
      322:	80 93 c4 00 	sts	0x00C4, r24
-	
-	// wifi enable init
-	// WIFI_EN  ( PD7 )
-	DDRD  |= 0x80; // output										// "0" input, "1" output
      326:	57 9a       	sbi	0x0a, 7	; 10
-	PORTD |= 0x80; // default high
      328:	5f 9a       	sbi	0x0b, 7	; 11
-	
-	wifiAndBTModuleReset();
      32a:	0e 94 52 01 	call	0x2a4	; 0x2a4 <wifiAndBTModuleReset>
      32e:	8f ef       	ldi	r24, 0xFF	; 255
      330:	9f e7       	ldi	r25, 0x7F	; 127
@@ -540,21 +397,13 @@ void wifiInit()
      33a:	e1 f7       	brne	.-8      	; 0x334 <wifiInit+0x32>
      33c:	00 c0       	rjmp	.+0      	; 0x33e <wifiInit+0x3c>
      33e:	00 00       	nop
-	_delay_ms(100);
-	wifiEnable(1);
      340:	81 e0       	ldi	r24, 0x01	; 1
      342:	0e 94 72 01 	call	0x2e4	; 0x2e4 <wifiEnable>
-	
-	callbackFnc = NULL;
-     346:	10 92 8b 0a 	sts	0x0A8B, r1
-     34a:	10 92 8a 0a 	sts	0x0A8A, r1
-}
+     346:	10 92 85 0a 	sts	0x0A85, r1
+     34a:	10 92 84 0a 	sts	0x0A84, r1
      34e:	08 95       	ret
 
 00000350 <wifiprint>:
-
-void wifiprint(const char *fmt,...)
-{
      350:	0f 93       	push	r16
      352:	1f 93       	push	r17
      354:	cf 93       	push	r28
@@ -573,40 +422,23 @@ void wifiprint(const char *fmt,...)
      36e:	ff 4f       	sbci	r31, 0xFF	; 255
      370:	61 91       	ld	r22, Z+
      372:	71 91       	ld	r23, Z+
-	va_list ap;
-	char s[128];
-	char *p_char = s;
-	va_start(ap, fmt);
-	vsprintf(s, fmt,ap);
      374:	ce 01       	movw	r24, r28
      376:	01 96       	adiw	r24, 0x01	; 1
      378:	4e 2f       	mov	r20, r30
      37a:	5f 2f       	mov	r21, r31
      37c:	0e 94 67 0a 	call	0x14ce	; 0x14ce <vsprintf>
-	va_end(ap);
-	while(0 != *p_char){
      380:	89 81       	ldd	r24, Y+1	; 0x01
      382:	88 23       	and	r24, r24
      384:	51 f0       	breq	.+20     	; 0x39a <wifiprint+0x4a>
      386:	8e 01       	movw	r16, r28
      388:	0e 5f       	subi	r16, 0xFE	; 254
      38a:	1f 4f       	sbci	r17, 0xFF	; 255
-		putCh0(*p_char++);
      38c:	0e 94 24 01 	call	0x248	; 0x248 <putCh0>
-	char s[128];
-	char *p_char = s;
-	va_start(ap, fmt);
-	vsprintf(s, fmt,ap);
-	va_end(ap);
-	while(0 != *p_char){
      390:	f8 01       	movw	r30, r16
      392:	81 91       	ld	r24, Z+
      394:	8f 01       	movw	r16, r30
      396:	88 23       	and	r24, r24
      398:	c9 f7       	brne	.-14     	; 0x38c <wifiprint+0x3c>
-		putCh0(*p_char++);
-	}
-}
      39a:	c0 58       	subi	r28, 0x80	; 128
      39c:	df 4f       	sbci	r29, 0xFF	; 255
      39e:	0f b6       	in	r0, 0x3f	; 63
@@ -621,12 +453,6 @@ void wifiprint(const char *fmt,...)
      3b0:	08 95       	ret
 
 000003b2 <parsingIPDRxData>:
-// 1 => under rxing
-// 2 => parcing fail
-
-// +IPD,<len>:<data>
-uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
-{
      3b2:	8f 92       	push	r8
      3b4:	9f 92       	push	r9
      3b6:	af 92       	push	r10
@@ -649,101 +475,40 @@ uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
      3d8:	cd bf       	out	0x3d, r28	; 61
      3da:	6c 01       	movw	r12, r24
      3dc:	7b 01       	movw	r14, r22
-	int deliIndex = -1;
-	int rxLen;
-	char  strTemp[10];
-	for( int i = 0; i < buffLen ; i++)
      3de:	16 16       	cp	r1, r22
      3e0:	17 06       	cpc	r1, r23
      3e2:	0c f0       	brlt	.+2      	; 0x3e6 <parsingIPDRxData+0x34>
      3e4:	76 c0       	rjmp	.+236    	; 0x4d2 <parsingIPDRxData+0x120>
-	{
-		if (buff[i] == ':')
      3e6:	fc 01       	movw	r30, r24
      3e8:	80 81       	ld	r24, Z
      3ea:	8a 33       	cpi	r24, 0x3A	; 58
      3ec:	c1 f0       	breq	.+48     	; 0x41e <parsingIPDRxData+0x6c>
-// 0 => success
-// 1 => under rxing
-// 2 => parcing fail
-
-// +IPD,<len>:<data>
-uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
      3ee:	31 96       	adiw	r30, 0x01	; 1
-{
-	int deliIndex = -1;
-	int rxLen;
-	char  strTemp[10];
-	for( int i = 0; i < buffLen ; i++)
      3f0:	80 e0       	ldi	r24, 0x00	; 0
      3f2:	90 e0       	ldi	r25, 0x00	; 0
      3f4:	03 c0       	rjmp	.+6      	; 0x3fc <parsingIPDRxData+0x4a>
-	{
-		if (buff[i] == ':')
      3f6:	21 91       	ld	r18, Z+
      3f8:	2a 33       	cpi	r18, 0x3A	; 58
      3fa:	31 f0       	breq	.+12     	; 0x408 <parsingIPDRxData+0x56>
-uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
-{
-	int deliIndex = -1;
-	int rxLen;
-	char  strTemp[10];
-	for( int i = 0; i < buffLen ; i++)
      3fc:	01 96       	adiw	r24, 0x01	; 1
      3fe:	8e 15       	cp	r24, r14
      400:	9f 05       	cpc	r25, r15
      402:	c9 f7       	brne	.-14     	; 0x3f6 <parsingIPDRxData+0x44>
-			break;
-		}
-	}
-	if ( deliIndex == -1)
-	{
-		return 1;
      404:	81 e0       	ldi	r24, 0x01	; 1
      406:	6e c0       	rjmp	.+220    	; 0x4e4 <parsingIPDRxData+0x132>
-		{
-			deliIndex = i;
-			break;
-		}
-	}
-	if ( deliIndex == -1)
      408:	ff ef       	ldi	r31, 0xFF	; 255
      40a:	8f 3f       	cpi	r24, 0xFF	; 255
      40c:	9f 07       	cpc	r25, r31
      40e:	09 f4       	brne	.+2      	; 0x412 <parsingIPDRxData+0x60>
      410:	62 c0       	rjmp	.+196    	; 0x4d6 <parsingIPDRxData+0x124>
-uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
-{
-	int deliIndex = -1;
-	int rxLen;
-	char  strTemp[10];
-	for( int i = 0; i < buffLen ; i++)
      412:	5c 01       	movw	r10, r24
-	}
-	if ( deliIndex == -1)
-	{
-		return 1;
-	}
-	if (deliIndex > 11 )
      414:	8c 30       	cpi	r24, 0x0C	; 12
      416:	91 05       	cpc	r25, r1
      418:	0c f0       	brlt	.+2      	; 0x41c <parsingIPDRxData+0x6a>
      41a:	5f c0       	rjmp	.+190    	; 0x4da <parsingIPDRxData+0x128>
      41c:	02 c0       	rjmp	.+4      	; 0x422 <parsingIPDRxData+0x70>
-uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
-{
-	int deliIndex = -1;
-	int rxLen;
-	char  strTemp[10];
-	for( int i = 0; i < buffLen ; i++)
      41e:	aa 24       	eor	r10, r10
      420:	bb 24       	eor	r11, r11
-	if (deliIndex > 11 )
-	{
-		
-		return 2;
-	}
-	memcpy(strTemp,buff+5, deliIndex - 5 );
      422:	85 01       	movw	r16, r10
      424:	05 50       	subi	r16, 0x05	; 5
      426:	10 40       	sbci	r17, 0x00	; 0
@@ -755,7 +520,6 @@ uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
      432:	40 2f       	mov	r20, r16
      434:	51 2f       	mov	r21, r17
      436:	0e 94 19 0a 	call	0x1432	; 0x1432 <memcpy>
-	strTemp[deliIndex - 5] = NULL;
      43a:	e1 e0       	ldi	r30, 0x01	; 1
      43c:	f0 e0       	ldi	r31, 0x00	; 0
      43e:	ec 0f       	add	r30, r28
@@ -763,22 +527,13 @@ uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
      442:	e0 0f       	add	r30, r16
      444:	f1 1f       	adc	r31, r17
      446:	10 82       	st	Z, r1
-	
-	rxLen = atoi(strTemp);
      448:	ce 01       	movw	r24, r28
      44a:	01 96       	adiw	r24, 0x01	; 1
      44c:	0e 94 fb 09 	call	0x13f6	; 0x13f6 <atoi>
      450:	ac 01       	movw	r20, r24
-	
-	if ( rxLen == 0)
      452:	00 97       	sbiw	r24, 0x00	; 0
      454:	09 f4       	brne	.+2      	; 0x458 <parsingIPDRxData+0xa6>
      456:	43 c0       	rjmp	.+134    	; 0x4de <parsingIPDRxData+0x12c>
-	{
-		return 2;
-	}
-	
-	if ( (buffLen -deliIndex-1) < rxLen )
      458:	ea 18       	sub	r14, r10
      45a:	fb 08       	sbc	r15, r11
      45c:	87 01       	movw	r16, r14
@@ -787,20 +542,15 @@ uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
      462:	08 17       	cp	r16, r24
      464:	19 07       	cpc	r17, r25
      466:	34 f5       	brge	.+76     	; 0x4b4 <parsingIPDRxData+0x102>
-	{
-		if ( (buffLen-deliIndex+1) == rxLen ) // message��  \r\n ���� ��� 
      468:	c7 01       	movw	r24, r14
      46a:	01 96       	adiw	r24, 0x01	; 1
      46c:	84 17       	cp	r24, r20
      46e:	95 07       	cpc	r25, r21
      470:	c1 f5       	brne	.+112    	; 0x4e2 <parsingIPDRxData+0x130>
-		{
-			g_wifiIPDRxDataLen = rxLen;	
-     472:	90 93 3f 04 	sts	0x043F, r25
-     476:	80 93 3e 04 	sts	0x043E, r24
-			memcpy(g_wifiIPDRxData,buff+deliIndex+1,rxLen-2 );
+     472:	90 93 39 04 	sts	0x0439, r25
+     476:	80 93 38 04 	sts	0x0438, r24
      47a:	0f 2e       	mov	r0, r31
-     47c:	fa e8       	ldi	r31, 0x8A	; 138
+     47c:	f4 e8       	ldi	r31, 0x84	; 132
      47e:	8f 2e       	mov	r8, r31
      480:	f4 e0       	ldi	r31, 0x04	; 4
      482:	9f 2e       	mov	r9, r31
@@ -815,29 +565,21 @@ uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
      494:	40 2f       	mov	r20, r16
      496:	51 2f       	mov	r21, r17
      498:	0e 94 19 0a 	call	0x1432	; 0x1432 <memcpy>
-			g_wifiIPDRxData[rxLen-2] = 0x0D;
      49c:	f4 01       	movw	r30, r8
      49e:	e0 0f       	add	r30, r16
      4a0:	f1 1f       	adc	r31, r17
      4a2:	8d e0       	ldi	r24, 0x0D	; 13
      4a4:	80 83       	st	Z, r24
-			g_wifiIPDRxData[rxLen-1] = 0x0A;
      4a6:	f4 01       	movw	r30, r8
      4a8:	ee 0d       	add	r30, r14
      4aa:	ff 1d       	adc	r31, r15
      4ac:	8a e0       	ldi	r24, 0x0A	; 10
      4ae:	80 83       	st	Z, r24
-			return 0;
      4b0:	80 e0       	ldi	r24, 0x00	; 0
      4b2:	18 c0       	rjmp	.+48     	; 0x4e4 <parsingIPDRxData+0x132>
-		}
-		return 1;
-	}
-	g_wifiIPDRxDataLen = rxLen;
-     4b4:	90 93 3f 04 	sts	0x043F, r25
-     4b8:	80 93 3e 04 	sts	0x043E, r24
-	memcpy(g_wifiIPDRxData,buff+deliIndex+1,rxLen );
-     4bc:	8a e8       	ldi	r24, 0x8A	; 138
+     4b4:	90 93 39 04 	sts	0x0439, r25
+     4b8:	80 93 38 04 	sts	0x0438, r24
+     4bc:	84 e8       	ldi	r24, 0x84	; 132
      4be:	94 e0       	ldi	r25, 0x04	; 4
      4c0:	b5 01       	movw	r22, r10
      4c2:	6f 5f       	subi	r22, 0xFF	; 255
@@ -845,46 +587,17 @@ uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
      4c6:	6c 0d       	add	r22, r12
      4c8:	7d 1d       	adc	r23, r13
      4ca:	0e 94 19 0a 	call	0x1432	; 0x1432 <memcpy>
-	return 0;
      4ce:	80 e0       	ldi	r24, 0x00	; 0
      4d0:	09 c0       	rjmp	.+18     	; 0x4e4 <parsingIPDRxData+0x132>
-			break;
-		}
-	}
-	if ( deliIndex == -1)
-	{
-		return 1;
      4d2:	81 e0       	ldi	r24, 0x01	; 1
      4d4:	07 c0       	rjmp	.+14     	; 0x4e4 <parsingIPDRxData+0x132>
      4d6:	81 e0       	ldi	r24, 0x01	; 1
      4d8:	05 c0       	rjmp	.+10     	; 0x4e4 <parsingIPDRxData+0x132>
-	}
-	if (deliIndex > 11 )
-	{
-		
-		return 2;
      4da:	82 e0       	ldi	r24, 0x02	; 2
      4dc:	03 c0       	rjmp	.+6      	; 0x4e4 <parsingIPDRxData+0x132>
-	
-	rxLen = atoi(strTemp);
-	
-	if ( rxLen == 0)
-	{
-		return 2;
      4de:	82 e0       	ldi	r24, 0x02	; 2
      4e0:	01 c0       	rjmp	.+2      	; 0x4e4 <parsingIPDRxData+0x132>
-			memcpy(g_wifiIPDRxData,buff+deliIndex+1,rxLen-2 );
-			g_wifiIPDRxData[rxLen-2] = 0x0D;
-			g_wifiIPDRxData[rxLen-1] = 0x0A;
-			return 0;
-		}
-		return 1;
      4e2:	81 e0       	ldi	r24, 0x01	; 1
-	}
-	g_wifiIPDRxDataLen = rxLen;
-	memcpy(g_wifiIPDRxData,buff+deliIndex+1,rxLen );
-	return 0;
-}
      4e4:	2a 96       	adiw	r28, 0x0a	; 10
      4e6:	0f b6       	in	r0, 0x3f	; 63
      4e8:	f8 94       	cli
@@ -906,24 +619,12 @@ uint8_t parsingIPDRxData(uint8_t* buff, int buffLen)
      508:	08 95       	ret
 
 0000050a <parsingMsg>:
-#define  MSG_SEND_READY	8
-#define  MSG_BYSY		9
-#define  MSG_UNDER_MSG  10
-
-uint8_t parsingMsg(uint8_t* buff, int buffLen)
-{
      50a:	0f 93       	push	r16
      50c:	1f 93       	push	r17
      50e:	cf 93       	push	r28
      510:	df 93       	push	r29
      512:	ec 01       	movw	r28, r24
      514:	8b 01       	movw	r16, r22
-	//putCh2(g_wifiRxData[i]);
-	debugprint("[%02X]",buff[i]);
-}
-debugprint("\r\n");
-#endif	
-	if (!strncmp((char*)buff,"OK",2))
      516:	60 e0       	ldi	r22, 0x00	; 0
      518:	72 e0       	ldi	r23, 0x02	; 2
      51a:	42 e0       	ldi	r20, 0x02	; 2
@@ -935,18 +636,10 @@ debugprint("\r\n");
      528:	31 05       	cpc	r19, r1
      52a:	09 f4       	brne	.+2      	; 0x52e <parsingMsg+0x24>
      52c:	6a c0       	rjmp	.+212    	; 0x602 <parsingMsg+0xf8>
-	{
-		return MSG_OK;
-	}
-	else if (buff[0] == '>')
      52e:	88 81       	ld	r24, Y
      530:	8e 33       	cpi	r24, 0x3E	; 62
      532:	09 f4       	brne	.+2      	; 0x536 <parsingMsg+0x2c>
      534:	68 c0       	rjmp	.+208    	; 0x606 <parsingMsg+0xfc>
-	{
-		return MSG_SEND_READY;
-	}
-	else if ((buffLen >= 7) && !strncmp(buff,"SEND OK",7)  )
      536:	07 30       	cpi	r16, 0x07	; 7
      538:	11 05       	cpc	r17, r1
      53a:	6c f0       	brlt	.+26     	; 0x556 <parsingMsg+0x4c>
@@ -962,10 +655,6 @@ debugprint("\r\n");
      550:	31 05       	cpc	r19, r1
      552:	09 f4       	brne	.+2      	; 0x556 <parsingMsg+0x4c>
      554:	5a c0       	rjmp	.+180    	; 0x60a <parsingMsg+0x100>
-	{
-		return MSG_SEND_OK;
-	}
-	else if ((buffLen >=4) &&  !strncmp(buff,"+IPD,",4) )
      556:	04 30       	cpi	r16, 0x04	; 4
      558:	11 05       	cpc	r17, r1
      55a:	c4 f0       	brlt	.+48     	; 0x58c <parsingMsg+0x82>
@@ -980,28 +669,17 @@ debugprint("\r\n");
      56e:	21 15       	cp	r18, r1
      570:	31 05       	cpc	r19, r1
      572:	61 f4       	brne	.+24     	; 0x58c <parsingMsg+0x82>
-	{
-		uint8_t temp;
-		temp = parsingIPDRxData(buff, buffLen);
      574:	ce 01       	movw	r24, r28
      576:	b8 01       	movw	r22, r16
      578:	0e 94 d9 01 	call	0x3b2	; 0x3b2 <parsingIPDRxData>
-		if ( temp == 0)
      57c:	88 23       	and	r24, r24
      57e:	09 f4       	brne	.+2      	; 0x582 <parsingMsg+0x78>
      580:	46 c0       	rjmp	.+140    	; 0x60e <parsingMsg+0x104>
-			return MSG_RX;
-		else if (temp == 1)
      582:	81 30       	cpi	r24, 0x01	; 1
      584:	09 f0       	breq	.+2      	; 0x588 <parsingMsg+0x7e>
      586:	45 c0       	rjmp	.+138    	; 0x612 <parsingMsg+0x108>
-			return MSG_RXING;
      588:	84 e0       	ldi	r24, 0x04	; 4
      58a:	4e c0       	rjmp	.+156    	; 0x628 <parsingMsg+0x11e>
-		
-		return MSG_UNDEFINED;	// fail
-	}
-	else if ((buffLen >= 5) && !strncmp(buff,"ERROR",5)  )
      58c:	05 30       	cpi	r16, 0x05	; 5
      58e:	11 05       	cpc	r17, r1
      590:	64 f0       	brlt	.+24     	; 0x5aa <parsingMsg+0xa0>
@@ -1016,10 +694,6 @@ debugprint("\r\n");
      5a4:	21 15       	cp	r18, r1
      5a6:	31 05       	cpc	r19, r1
      5a8:	b1 f1       	breq	.+108    	; 0x616 <parsingMsg+0x10c>
-	{
-		return MSG_ERROR;
-	}
-	else if ((buffLen >= 4) && !strncmp(buff,"FAIL",5)  )
      5aa:	04 30       	cpi	r16, 0x04	; 4
      5ac:	11 05       	cpc	r17, r1
      5ae:	64 f0       	brlt	.+24     	; 0x5c8 <parsingMsg+0xbe>
@@ -1034,10 +708,6 @@ debugprint("\r\n");
      5c2:	21 15       	cp	r18, r1
      5c4:	31 05       	cpc	r19, r1
      5c6:	49 f1       	breq	.+82     	; 0x61a <parsingMsg+0x110>
-	{
-		return MSG_FAIL;
-	}
-	else if ((buffLen >= 7) && !strncmp(buff,"ALREADY",7)  )
      5c8:	07 30       	cpi	r16, 0x07	; 7
      5ca:	11 05       	cpc	r17, r1
      5cc:	44 f1       	brlt	.+80     	; 0x61e <parsingMsg+0x114>
@@ -1052,10 +722,6 @@ debugprint("\r\n");
      5e0:	21 15       	cp	r18, r1
      5e2:	31 05       	cpc	r19, r1
      5e4:	f1 f0       	breq	.+60     	; 0x622 <parsingMsg+0x118>
-	{
-		return MSG_ALREAD;
-	}
-	else if ((buffLen>= 7) && !strncmp(buff,"busy...",7) )
      5e6:	ce 01       	movw	r24, r28
      5e8:	64 e2       	ldi	r22, 0x24	; 36
      5ea:	72 e0       	ldi	r23, 0x02	; 2
@@ -1067,83 +733,27 @@ debugprint("\r\n");
      5f8:	21 15       	cp	r18, r1
      5fa:	31 05       	cpc	r19, r1
      5fc:	a1 f4       	brne	.+40     	; 0x626 <parsingMsg+0x11c>
-	{
-		return MSG_BYSY;
      5fe:	89 e0       	ldi	r24, 0x09	; 9
      600:	13 c0       	rjmp	.+38     	; 0x628 <parsingMsg+0x11e>
-}
-debugprint("\r\n");
-#endif	
-	if (!strncmp((char*)buff,"OK",2))
-	{
-		return MSG_OK;
      602:	82 e0       	ldi	r24, 0x02	; 2
      604:	11 c0       	rjmp	.+34     	; 0x628 <parsingMsg+0x11e>
-	}
-	else if (buff[0] == '>')
-	{
-		return MSG_SEND_READY;
      606:	88 e0       	ldi	r24, 0x08	; 8
      608:	0f c0       	rjmp	.+30     	; 0x628 <parsingMsg+0x11e>
-	}
-	else if ((buffLen >= 7) && !strncmp(buff,"SEND OK",7)  )
-	{
-		return MSG_SEND_OK;
      60a:	81 e0       	ldi	r24, 0x01	; 1
      60c:	0d c0       	rjmp	.+26     	; 0x628 <parsingMsg+0x11e>
-	else if ((buffLen >=4) &&  !strncmp(buff,"+IPD,",4) )
-	{
-		uint8_t temp;
-		temp = parsingIPDRxData(buff, buffLen);
-		if ( temp == 0)
-			return MSG_RX;
      60e:	83 e0       	ldi	r24, 0x03	; 3
      610:	0b c0       	rjmp	.+22     	; 0x628 <parsingMsg+0x11e>
-		else if (temp == 1)
-			return MSG_RXING;
-		
-		return MSG_UNDEFINED;	// fail
      612:	80 e0       	ldi	r24, 0x00	; 0
      614:	09 c0       	rjmp	.+18     	; 0x628 <parsingMsg+0x11e>
-	}
-	else if ((buffLen >= 5) && !strncmp(buff,"ERROR",5)  )
-	{
-		return MSG_ERROR;
      616:	85 e0       	ldi	r24, 0x05	; 5
      618:	07 c0       	rjmp	.+14     	; 0x628 <parsingMsg+0x11e>
-	}
-	else if ((buffLen >= 4) && !strncmp(buff,"FAIL",5)  )
-	{
-		return MSG_FAIL;
      61a:	86 e0       	ldi	r24, 0x06	; 6
      61c:	05 c0       	rjmp	.+10     	; 0x628 <parsingMsg+0x11e>
-	else if (buffLen>= 7)
-	{
-		return MSG_UNDEFINED;
-	}
-	
-	return MSG_UNDER_MSG;
      61e:	8a e0       	ldi	r24, 0x0A	; 10
      620:	03 c0       	rjmp	.+6      	; 0x628 <parsingMsg+0x11e>
-	{
-		return MSG_FAIL;
-	}
-	else if ((buffLen >= 7) && !strncmp(buff,"ALREADY",7)  )
-	{
-		return MSG_ALREAD;
      622:	87 e0       	ldi	r24, 0x07	; 7
      624:	01 c0       	rjmp	.+2      	; 0x628 <parsingMsg+0x11e>
-	{
-		return MSG_BYSY;
-	}
-	else if (buffLen>= 7)
-	{
-		return MSG_UNDEFINED;
      626:	80 e0       	ldi	r24, 0x00	; 0
-	}
-	
-	return MSG_UNDER_MSG;
-}
      628:	df 91       	pop	r29
      62a:	cf 91       	pop	r28
      62c:	1f 91       	pop	r17
@@ -1151,9 +761,6 @@ debugprint("\r\n");
      630:	08 95       	ret
 
 00000632 <rxDataProcess>:
-
-uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
-{
      632:	2f 92       	push	r2
      634:	3f 92       	push	r3
      636:	4f 92       	push	r4
@@ -1183,88 +790,47 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      666:	cd bf       	out	0x3d, r28	; 61
      668:	3c 01       	movw	r6, r24
      66a:	c6 2e       	mov	r12, r22
-	int lineFeedIndex;
-	
-	uint8_t syncDetected;
-	uint8_t temp;
-	uint8_t msgBuffIndex = 0;
-	if (g_wifiRxCurrentIndex == 0 )
-     66c:	80 91 40 04 	lds	r24, 0x0440
+     66c:	80 91 3a 04 	lds	r24, 0x043A
      670:	88 23       	and	r24, r24
      672:	09 f4       	brne	.+2      	; 0x676 <rxDataProcess+0x44>
      674:	0b c1       	rjmp	.+534    	; 0x88c <rxDataProcess+0x25a>
-		return 0;
-	
-	if ((g_rxDataLen + g_wifiRxCurrentIndex) >= MAX_WIFI_RX_DATA )
-     676:	20 91 40 04 	lds	r18, 0x0440
-     67a:	80 91 3b 04 	lds	r24, 0x043B
-     67e:	90 91 3c 04 	lds	r25, 0x043C
+     676:	20 91 3a 04 	lds	r18, 0x043A
+     67a:	80 91 35 04 	lds	r24, 0x0435
+     67e:	90 91 36 04 	lds	r25, 0x0436
      682:	82 0f       	add	r24, r18
      684:	91 1d       	adc	r25, r1
      686:	22 e0       	ldi	r18, 0x02	; 2
      688:	80 30       	cpi	r24, 0x00	; 0
      68a:	92 07       	cpc	r25, r18
      68c:	44 f0       	brlt	.+16     	; 0x69e <rxDataProcess+0x6c>
-	{
-		g_rxDataLen = 0;
-     68e:	10 92 3c 04 	sts	0x043C, r1
-     692:	10 92 3b 04 	sts	0x043B, r1
-		g_underRxDataFlag = 0;
-     696:	10 92 3d 04 	sts	0x043D, r1
-		return msgBuffIndex;
+     68e:	10 92 36 04 	sts	0x0436, r1
+     692:	10 92 35 04 	sts	0x0435, r1
+     696:	10 92 37 04 	sts	0x0437, r1
      69a:	dd 24       	eor	r13, r13
      69c:	f8 c0       	rjmp	.+496    	; 0x88e <rxDataProcess+0x25c>
-	}
-	memcpy(g_rxDataBuff,g_wifiRxData,g_wifiRxCurrentIndex);
-     69e:	40 91 40 04 	lds	r20, 0x0440
-     6a2:	8a e8       	ldi	r24, 0x8A	; 138
+     69e:	40 91 3a 04 	lds	r20, 0x043A
+     6a2:	84 e8       	ldi	r24, 0x84	; 132
      6a4:	98 e0       	ldi	r25, 0x08	; 8
-     6a6:	6a e8       	ldi	r22, 0x8A	; 138
+     6a6:	64 e8       	ldi	r22, 0x84	; 132
      6a8:	76 e0       	ldi	r23, 0x06	; 6
      6aa:	50 e0       	ldi	r21, 0x00	; 0
      6ac:	0e 94 19 0a 	call	0x1432	; 0x1432 <memcpy>
-	g_rxDataLen += (int)g_wifiRxCurrentIndex;
-     6b0:	20 91 40 04 	lds	r18, 0x0440
-     6b4:	80 91 3b 04 	lds	r24, 0x043B
-     6b8:	90 91 3c 04 	lds	r25, 0x043C
+     6b0:	20 91 3a 04 	lds	r18, 0x043A
+     6b4:	80 91 35 04 	lds	r24, 0x0435
+     6b8:	90 91 36 04 	lds	r25, 0x0436
      6bc:	82 0f       	add	r24, r18
      6be:	91 1d       	adc	r25, r1
-     6c0:	90 93 3c 04 	sts	0x043C, r25
-     6c4:	80 93 3b 04 	sts	0x043B, r24
-	g_wifiRxCurrentIndex = 0;
-     6c8:	10 92 40 04 	sts	0x0440, r1
-	int  carriageReturnIndex;
-	int lineFeedIndex;
-	
-	uint8_t syncDetected;
-	uint8_t temp;
-	uint8_t msgBuffIndex = 0;
+     6c0:	90 93 36 04 	sts	0x0436, r25
+     6c4:	80 93 35 04 	sts	0x0435, r24
+     6c8:	10 92 3a 04 	sts	0x043A, r1
      6cc:	dd 24       	eor	r13, r13
-	while(1)
-	{
-		carriageReturnIndex = -1;
-		lineFeedIndex = -1;
-		
-		for ( int i = 0; i < g_rxDataLen ; i++ )
      6ce:	aa 24       	eor	r10, r10
      6d0:	bb 24       	eor	r11, r11
-	}
-#endif
-
-	while(1)
-	{
-		carriageReturnIndex = -1;
      6d2:	88 24       	eor	r8, r8
      6d4:	8a 94       	dec	r8
      6d6:	98 2c       	mov	r9, r8
-					break;
-				}
-			}
-			else
-			{
-				if ( g_rxDataBuff[i] ==  CARRIAGE_RETURN )
      6d8:	0f 2e       	mov	r0, r31
-     6da:	fa e8       	ldi	r31, 0x8A	; 138
+     6da:	f4 e8       	ldi	r31, 0x84	; 132
      6dc:	ef 2e       	mov	r14, r31
      6de:	f8 e0       	ldi	r31, 0x08	; 8
      6e0:	ff 2e       	mov	r15, r31
@@ -1279,19 +845,12 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      6f2:	f8 82       	st	Y, r15
      6f4:	c2 50       	subi	r28, 0x02	; 2
      6f6:	d2 40       	sbci	r29, 0x02	; 2
-				if ( (g_rxDataBuff[i] ==  LINE_FEED) && ((carriageReturnIndex+1) == i ) )
-				{
-					lineFeedIndex = i;
-					if ( lineFeedIndex == 1)//
-					{
-						memcpy(strTemp, g_rxDataBuff+lineFeedIndex+1, g_rxDataLen - lineFeedIndex -1);
      6f8:	0f 2e       	mov	r0, r31
-     6fa:	fc e8       	ldi	r31, 0x8C	; 140
+     6fa:	f6 e8       	ldi	r31, 0x86	; 134
      6fc:	4f 2e       	mov	r4, r31
      6fe:	f8 e0       	ldi	r31, 0x08	; 8
      700:	5f 2e       	mov	r5, r31
      702:	f0 2d       	mov	r31, r0
-						memcpy(g_rxDataBuff , strTemp, g_rxDataLen - lineFeedIndex -1);
      704:	0f 2e       	mov	r0, r31
      706:	fe ef       	ldi	r31, 0xFE	; 254
      708:	2f 2e       	mov	r2, r31
@@ -1300,39 +859,19 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      70e:	f0 2d       	mov	r31, r0
      710:	24 0c       	add	r2, r4
      712:	35 1c       	adc	r3, r5
-	while(1)
-	{
-		carriageReturnIndex = -1;
-		lineFeedIndex = -1;
-		
-		for ( int i = 0; i < g_rxDataLen ; i++ )
-     714:	80 91 3b 04 	lds	r24, 0x043B
-     718:	90 91 3c 04 	lds	r25, 0x043C
+     714:	80 91 35 04 	lds	r24, 0x0435
+     718:	90 91 36 04 	lds	r25, 0x0436
      71c:	18 16       	cp	r1, r24
      71e:	19 06       	cpc	r1, r25
      720:	0c f0       	brlt	.+2      	; 0x724 <rxDataProcess+0xf2>
      722:	9b c0       	rjmp	.+310    	; 0x85a <rxDataProcess+0x228>
      724:	85 01       	movw	r16, r10
-	}
-#endif
-
-	while(1)
-	{
-		carriageReturnIndex = -1;
      726:	b4 01       	movw	r22, r8
-		lineFeedIndex = -1;
-		
-		for ( int i = 0; i < g_rxDataLen ; i++ )
-		{
-			// check carriage return and line feed
-			if ( carriageReturnIndex !=  -1)
      728:	8f ef       	ldi	r24, 0xFF	; 255
      72a:	6f 3f       	cpi	r22, 0xFF	; 255
      72c:	78 07       	cpc	r23, r24
      72e:	09 f4       	brne	.+2      	; 0x732 <rxDataProcess+0x100>
      730:	83 c0       	rjmp	.+262    	; 0x838 <rxDataProcess+0x206>
-			{
-				if ( (g_rxDataBuff[i] ==  LINE_FEED) && ((carriageReturnIndex+1) == i ) )
      732:	f7 01       	movw	r30, r14
      734:	e0 0f       	add	r30, r16
      736:	f1 1f       	adc	r31, r17
@@ -1346,16 +885,11 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      746:	91 07       	cpc	r25, r17
      748:	09 f0       	breq	.+2      	; 0x74c <rxDataProcess+0x11a>
      74a:	7d c0       	rjmp	.+250    	; 0x846 <rxDataProcess+0x214>
-				{
-					lineFeedIndex = i;
-					if ( lineFeedIndex == 1)//
      74c:	81 30       	cpi	r24, 0x01	; 1
      74e:	91 05       	cpc	r25, r1
      750:	19 f5       	brne	.+70     	; 0x798 <rxDataProcess+0x166>
-					{
-						memcpy(strTemp, g_rxDataBuff+lineFeedIndex+1, g_rxDataLen - lineFeedIndex -1);
-     752:	40 91 3b 04 	lds	r20, 0x043B
-     756:	50 91 3c 04 	lds	r21, 0x043C
+     752:	40 91 35 04 	lds	r20, 0x0435
+     756:	50 91 36 04 	lds	r21, 0x0436
      75a:	42 50       	subi	r20, 0x02	; 2
      75c:	50 40       	sbci	r21, 0x00	; 0
      75e:	ce 01       	movw	r24, r28
@@ -1363,9 +897,8 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      762:	64 2d       	mov	r22, r4
      764:	75 2d       	mov	r23, r5
      766:	0e 94 19 0a 	call	0x1432	; 0x1432 <memcpy>
-						memcpy(g_rxDataBuff , strTemp, g_rxDataLen - lineFeedIndex -1);
-     76a:	40 91 3b 04 	lds	r20, 0x043B
-     76e:	50 91 3c 04 	lds	r21, 0x043C
+     76a:	40 91 35 04 	lds	r20, 0x0435
+     76e:	50 91 36 04 	lds	r21, 0x0436
      772:	42 50       	subi	r20, 0x02	; 2
      774:	50 40       	sbci	r21, 0x00	; 0
      776:	82 2d       	mov	r24, r2
@@ -1374,16 +907,12 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      77c:	6f 5f       	subi	r22, 0xFF	; 255
      77e:	7f 4f       	sbci	r23, 0xFF	; 255
      780:	0e 94 19 0a 	call	0x1432	; 0x1432 <memcpy>
-						g_rxDataLen -= (lineFeedIndex + 1);
-     784:	80 91 3b 04 	lds	r24, 0x043B
-     788:	90 91 3c 04 	lds	r25, 0x043C
+     784:	80 91 35 04 	lds	r24, 0x0435
+     788:	90 91 36 04 	lds	r25, 0x0436
      78c:	02 97       	sbiw	r24, 0x02	; 2
-     78e:	90 93 3c 04 	sts	0x043C, r25
-     792:	80 93 3b 04 	sts	0x043B, r24
+     78e:	90 93 36 04 	sts	0x0436, r25
+     792:	80 93 35 04 	sts	0x0435, r24
      796:	be cf       	rjmp	.-132    	; 0x714 <rxDataProcess+0xe2>
-						break;
-					}
-					temp = parsingMsg(g_rxDataBuff, carriageReturnIndex);
      798:	cf 5f       	subi	r28, 0xFF	; 255
      79a:	dd 4f       	sbci	r29, 0xFD	; 253
      79c:	88 81       	ld	r24, Y
@@ -1395,40 +924,27 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      7a8:	c2 50       	subi	r28, 0x02	; 2
      7aa:	d2 40       	sbci	r29, 0x02	; 2
      7ac:	0e 94 85 02 	call	0x50a	; 0x50a <parsingMsg>
-					//					debugprint("M1:%d\r\n",temp);
-					if ( msgBuffIndex <  msgBuffLen )
      7b0:	dc 14       	cp	r13, r12
      7b2:	28 f4       	brcc	.+10     	; 0x7be <rxDataProcess+0x18c>
-					{
-						msgBuff[msgBuffIndex] = temp;
      7b4:	f3 01       	movw	r30, r6
      7b6:	ed 0d       	add	r30, r13
      7b8:	f1 1d       	adc	r31, r1
      7ba:	80 83       	st	Z, r24
-						msgBuffIndex++;
      7bc:	d3 94       	inc	r13
-						
-					}
-					if ( (lineFeedIndex+1) == g_rxDataLen ) //when  line feed is data end
-     7be:	20 91 3b 04 	lds	r18, 0x043B
-     7c2:	30 91 3c 04 	lds	r19, 0x043C
+     7be:	20 91 35 04 	lds	r18, 0x0435
+     7c2:	30 91 36 04 	lds	r19, 0x0436
      7c6:	c8 01       	movw	r24, r16
      7c8:	01 96       	adiw	r24, 0x01	; 1
      7ca:	82 17       	cp	r24, r18
      7cc:	93 07       	cpc	r25, r19
      7ce:	19 f4       	brne	.+6      	; 0x7d6 <rxDataProcess+0x1a4>
-					{
-						g_underRxDataFlag = 0;
-     7d0:	10 92 3d 04 	sts	0x043D, r1
-						return msgBuffIndex;
+     7d0:	10 92 37 04 	sts	0x0437, r1
      7d4:	5c c0       	rjmp	.+184    	; 0x88e <rxDataProcess+0x25c>
-					}
-					memcpy(strTemp, g_rxDataBuff+lineFeedIndex+1, g_rxDataLen - lineFeedIndex -1);
      7d6:	b8 01       	movw	r22, r16
-     7d8:	65 57       	subi	r22, 0x75	; 117
+     7d8:	6b 57       	subi	r22, 0x7B	; 123
      7da:	77 4f       	sbci	r23, 0xF7	; 247
-     7dc:	40 91 3b 04 	lds	r20, 0x043B
-     7e0:	50 91 3c 04 	lds	r21, 0x043C
+     7dc:	40 91 35 04 	lds	r20, 0x0435
+     7e0:	50 91 36 04 	lds	r21, 0x0436
      7e4:	40 1b       	sub	r20, r16
      7e6:	51 0b       	sbc	r21, r17
      7e8:	41 50       	subi	r20, 0x01	; 1
@@ -1436,9 +952,8 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      7ec:	ce 01       	movw	r24, r28
      7ee:	01 96       	adiw	r24, 0x01	; 1
      7f0:	0e 94 19 0a 	call	0x1432	; 0x1432 <memcpy>
-					memcpy(g_rxDataBuff , strTemp, g_rxDataLen - lineFeedIndex -1);
-     7f4:	40 91 3b 04 	lds	r20, 0x043B
-     7f8:	50 91 3c 04 	lds	r21, 0x043C
+     7f4:	40 91 35 04 	lds	r20, 0x0435
+     7f8:	50 91 36 04 	lds	r21, 0x0436
      7fc:	40 1b       	sub	r20, r16
      7fe:	51 0b       	sbc	r21, r17
      800:	41 50       	subi	r20, 0x01	; 1
@@ -1449,34 +964,21 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      80a:	6f 5f       	subi	r22, 0xFF	; 255
      80c:	7f 4f       	sbci	r23, 0xFF	; 255
      80e:	0e 94 19 0a 	call	0x1432	; 0x1432 <memcpy>
-					g_rxDataLen -= (lineFeedIndex + 1);
-     812:	20 91 3b 04 	lds	r18, 0x043B
-     816:	30 91 3c 04 	lds	r19, 0x043C
+     812:	20 91 35 04 	lds	r18, 0x0435
+     816:	30 91 36 04 	lds	r19, 0x0436
      81a:	c8 01       	movw	r24, r16
      81c:	80 95       	com	r24
      81e:	90 95       	com	r25
      820:	82 0f       	add	r24, r18
      822:	93 1f       	adc	r25, r19
-     824:	90 93 3c 04 	sts	0x043C, r25
-     828:	80 93 3b 04 	sts	0x043B, r24
-					continue;
-				}
-			}
-		}
-		
-		if ( lineFeedIndex == -1) // no find sync, check rxing data
+     824:	90 93 36 04 	sts	0x0436, r25
+     828:	80 93 35 04 	sts	0x0435, r24
      82c:	2f ef       	ldi	r18, 0xFF	; 255
      82e:	0f 3f       	cpi	r16, 0xFF	; 255
      830:	12 07       	cpc	r17, r18
      832:	09 f0       	breq	.+2      	; 0x836 <rxDataProcess+0x204>
      834:	6f cf       	rjmp	.-290    	; 0x714 <rxDataProcess+0xe2>
      836:	11 c0       	rjmp	.+34     	; 0x85a <rxDataProcess+0x228>
-					break;
-				}
-			}
-			else
-			{
-				if ( g_rxDataBuff[i] ==  CARRIAGE_RETURN )
      838:	f7 01       	movw	r30, r14
      83a:	e0 0f       	add	r30, r16
      83c:	f1 1f       	adc	r31, r17
@@ -1484,71 +986,34 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      840:	8d 30       	cpi	r24, 0x0D	; 13
      842:	09 f4       	brne	.+2      	; 0x846 <rxDataProcess+0x214>
      844:	b8 01       	movw	r22, r16
-	while(1)
-	{
-		carriageReturnIndex = -1;
-		lineFeedIndex = -1;
-		
-		for ( int i = 0; i < g_rxDataLen ; i++ )
      846:	0f 5f       	subi	r16, 0xFF	; 255
      848:	1f 4f       	sbci	r17, 0xFF	; 255
-     84a:	80 91 3b 04 	lds	r24, 0x043B
-     84e:	90 91 3c 04 	lds	r25, 0x043C
+     84a:	80 91 35 04 	lds	r24, 0x0435
+     84e:	90 91 36 04 	lds	r25, 0x0436
      852:	08 17       	cp	r16, r24
      854:	19 07       	cpc	r17, r25
      856:	0c f4       	brge	.+2      	; 0x85a <rxDataProcess+0x228>
      858:	67 cf       	rjmp	.-306    	; 0x728 <rxDataProcess+0xf6>
-			}
-		}
-		
-		if ( lineFeedIndex == -1) // no find sync, check rxing data
-		{
-			g_underRxDataFlag = 1;
      85a:	81 e0       	ldi	r24, 0x01	; 1
-     85c:	80 93 3d 04 	sts	0x043D, r24
-			
-			temp = parsingMsg(g_rxDataBuff, g_rxDataLen);
-     860:	60 91 3b 04 	lds	r22, 0x043B
-     864:	70 91 3c 04 	lds	r23, 0x043C
-     868:	8a e8       	ldi	r24, 0x8A	; 138
+     85c:	80 93 37 04 	sts	0x0437, r24
+     860:	60 91 35 04 	lds	r22, 0x0435
+     864:	70 91 36 04 	lds	r23, 0x0436
+     868:	84 e8       	ldi	r24, 0x84	; 132
      86a:	98 e0       	ldi	r25, 0x08	; 8
      86c:	0e 94 85 02 	call	0x50a	; 0x50a <parsingMsg>
-			//			debugprint("M2:%d\r\n",temp);
-			if ((temp ==MSG_UNDER_MSG) || (temp ==MSG_RXING) )
      870:	8a 30       	cpi	r24, 0x0A	; 10
      872:	31 f0       	breq	.+12     	; 0x880 <rxDataProcess+0x24e>
      874:	84 30       	cpi	r24, 0x04	; 4
      876:	21 f0       	breq	.+8      	; 0x880 <rxDataProcess+0x24e>
-			{
-			}
-			else
-			{
-				g_rxDataLen = 0;
-     878:	10 92 3c 04 	sts	0x043C, r1
-     87c:	10 92 3b 04 	sts	0x043B, r1
-			}
-			msgBuff[msgBuffIndex] = temp;
+     878:	10 92 36 04 	sts	0x0436, r1
+     87c:	10 92 35 04 	sts	0x0435, r1
      880:	f3 01       	movw	r30, r6
      882:	ed 0d       	add	r30, r13
      884:	f1 1d       	adc	r31, r1
      886:	80 83       	st	Z, r24
-			msgBuffIndex++;
      888:	d3 94       	inc	r13
-			return msgBuffIndex;
      88a:	01 c0       	rjmp	.+2      	; 0x88e <rxDataProcess+0x25c>
-	
-	uint8_t syncDetected;
-	uint8_t temp;
-	uint8_t msgBuffIndex = 0;
-	if (g_wifiRxCurrentIndex == 0 )
-		return 0;
      88c:	dd 24       	eor	r13, r13
-			return msgBuffIndex;
-		}
-	}
-	
-	return msgBuffIndex;
-}
      88e:	8d 2d       	mov	r24, r13
      890:	ce 5f       	subi	r28, 0xFE	; 254
      892:	dd 4f       	sbci	r29, 0xFD	; 253
@@ -1578,94 +1043,53 @@ uint8_t rxDataProcess(uint8_t* msgBuff, uint8_t msgBuffLen)
      8c2:	08 95       	ret
 
 000008c4 <wifiMain>:
-[04][00][00][00][00][00][00][00][00][00][00][00][00][01][02][04][00][00][00][00][00][00][00][00][03]
-[00][00][00][00][1E][00][00][00][FF]
-*/
-
-void wifiMain()
-{
      8c4:	cf 93       	push	r28
      8c6:	df 93       	push	r29
      8c8:	00 d0       	rcall	.+0      	; 0x8ca <wifiMain+0x6>
      8ca:	0f 92       	push	r0
      8cc:	cd b7       	in	r28, 0x3d	; 61
      8ce:	de b7       	in	r29, 0x3e	; 62
-	g_wifiRxCurrentIndex = 0;
-#else
-	int i;
-	int  endIndex = -1;
-	
-	if ( g_wifiIPDRxDataLen )// no ipd data
-     8d0:	80 91 3e 04 	lds	r24, 0x043E
-     8d4:	90 91 3f 04 	lds	r25, 0x043F
+     8d0:	80 91 38 04 	lds	r24, 0x0438
+     8d4:	90 91 39 04 	lds	r25, 0x0439
      8d8:	00 97       	sbiw	r24, 0x00	; 0
      8da:	99 f0       	breq	.+38     	; 0x902 <wifiMain+0x3e>
-	{
-		if (callbackFnc != NULL )
-     8dc:	e0 91 8a 0a 	lds	r30, 0x0A8A
-     8e0:	f0 91 8b 0a 	lds	r31, 0x0A8B
+     8dc:	e0 91 84 0a 	lds	r30, 0x0A84
+     8e0:	f0 91 85 0a 	lds	r31, 0x0A85
      8e4:	30 97       	sbiw	r30, 0x00	; 0
      8e6:	49 f0       	breq	.+18     	; 0x8fa <wifiMain+0x36>
-		{
-			callbackFnc(EVENT_RX_DATA,g_wifiIPDRxData,g_wifiIPDRxDataLen);
-     8e8:	40 91 3e 04 	lds	r20, 0x043E
-     8ec:	50 91 3f 04 	lds	r21, 0x043F
+     8e8:	40 91 38 04 	lds	r20, 0x0438
+     8ec:	50 91 39 04 	lds	r21, 0x0439
      8f0:	81 e0       	ldi	r24, 0x01	; 1
      8f2:	90 e0       	ldi	r25, 0x00	; 0
-     8f4:	6a e8       	ldi	r22, 0x8A	; 138
+     8f4:	64 e8       	ldi	r22, 0x84	; 132
      8f6:	74 e0       	ldi	r23, 0x04	; 4
      8f8:	19 95       	eicall
-		}
-		g_wifiIPDRxDataLen = 0;
-     8fa:	10 92 3f 04 	sts	0x043F, r1
-     8fe:	10 92 3e 04 	sts	0x043E, r1
-		
-	}
-	
-	if ( !g_wifiRxCurrentIndex )
-     902:	80 91 40 04 	lds	r24, 0x0440
+     8fa:	10 92 39 04 	sts	0x0439, r1
+     8fe:	10 92 38 04 	sts	0x0438, r1
+     902:	80 91 3a 04 	lds	r24, 0x043A
      906:	88 23       	and	r24, r24
      908:	f1 f0       	breq	.+60     	; 0x946 <wifiMain+0x82>
-	}
-#endif
-
-	uint8_t msgBuff[4];
-	uint8_t msgRxNum;
-	msgRxNum = rxDataProcess(msgBuff,4);
      90a:	ce 01       	movw	r24, r28
      90c:	01 96       	adiw	r24, 0x01	; 1
      90e:	64 e0       	ldi	r22, 0x04	; 4
      910:	0e 94 19 03 	call	0x632	; 0x632 <rxDataProcess>
-	
-	
-	if ( !g_wifiIPDRxDataLen )// no ipd data
-     914:	80 91 3e 04 	lds	r24, 0x043E
-     918:	90 91 3f 04 	lds	r25, 0x043F
+     914:	80 91 38 04 	lds	r24, 0x0438
+     918:	90 91 39 04 	lds	r25, 0x0439
      91c:	00 97       	sbiw	r24, 0x00	; 0
      91e:	99 f0       	breq	.+38     	; 0x946 <wifiMain+0x82>
-		return;
-
-	if (callbackFnc != NULL )
-     920:	e0 91 8a 0a 	lds	r30, 0x0A8A
-     924:	f0 91 8b 0a 	lds	r31, 0x0A8B
+     920:	e0 91 84 0a 	lds	r30, 0x0A84
+     924:	f0 91 85 0a 	lds	r31, 0x0A85
      928:	30 97       	sbiw	r30, 0x00	; 0
      92a:	49 f0       	breq	.+18     	; 0x93e <wifiMain+0x7a>
-	{
-		callbackFnc(EVENT_RX_DATA,g_wifiIPDRxData,g_wifiIPDRxDataLen);
-     92c:	40 91 3e 04 	lds	r20, 0x043E
-     930:	50 91 3f 04 	lds	r21, 0x043F
+     92c:	40 91 38 04 	lds	r20, 0x0438
+     930:	50 91 39 04 	lds	r21, 0x0439
      934:	81 e0       	ldi	r24, 0x01	; 1
      936:	90 e0       	ldi	r25, 0x00	; 0
-     938:	6a e8       	ldi	r22, 0x8A	; 138
+     938:	64 e8       	ldi	r22, 0x84	; 132
      93a:	74 e0       	ldi	r23, 0x04	; 4
      93c:	19 95       	eicall
-	}
-	g_wifiIPDRxDataLen = 0;
-     93e:	10 92 3f 04 	sts	0x043F, r1
-     942:	10 92 3e 04 	sts	0x043E, r1
-
-	#endif
-}
+     93e:	10 92 39 04 	sts	0x0439, r1
+     942:	10 92 38 04 	sts	0x0438, r1
      946:	0f 90       	pop	r0
      948:	0f 90       	pop	r0
      94a:	0f 90       	pop	r0
@@ -1675,9 +1099,6 @@ void wifiMain()
      952:	08 95       	ret
 
 00000954 <WaitOKWithPrint>:
-
-int WaitOKWithPrint()
-{
      954:	2f 92       	push	r2
      956:	3f 92       	push	r3
      958:	4f 92       	push	r4
@@ -1705,88 +1126,43 @@ int WaitOKWithPrint()
      984:	de bf       	out	0x3e, r29	; 62
      986:	0f be       	out	0x3f, r0	; 63
      988:	cd bf       	out	0x3d, r28	; 61
-	uint8_t strTemp[512];
-	int currentIndex = 0;
      98a:	ee 24       	eor	r14, r14
      98c:	ff 24       	eor	r15, r15
-		if (g_wifiRxCurrentIndex)
-		{
-			for (i = 0; i < g_wifiRxCurrentIndex ; i++)
-			{
-				//
-				strTemp[currentIndex++] = g_wifiRxData[i];
      98e:	0f 2e       	mov	r0, r31
-     990:	fa e8       	ldi	r31, 0x8A	; 138
+     990:	f4 e8       	ldi	r31, 0x84	; 132
      992:	af 2e       	mov	r10, r31
      994:	f6 e0       	ldi	r31, 0x06	; 6
      996:	bf 2e       	mov	r11, r31
      998:	f0 2d       	mov	r31, r0
-						{
-							g_wifiRxCurrentIndex = 0;
-							//							debugprint("error\r\n");
-							return -1;
-						}
-						else if ((currentIndex >= 7) && !strncmp(strTemp,"ERROR",5)  )
      99a:	0f 2e       	mov	r0, r31
      99c:	f1 e1       	ldi	r31, 0x11	; 17
      99e:	2f 2e       	mov	r2, r31
      9a0:	f2 e0       	ldi	r31, 0x02	; 2
      9a2:	3f 2e       	mov	r3, r31
      9a4:	f0 2d       	mov	r31, r0
-				{
-					//debugprint("\r\n");
-					if ( currentIndex >= 4) // "OK\r\n"
-					{
-						// check end  "OK\r\n"
-						if (!strncmp((char*)strTemp,"OK",2))
      9a6:	0f 2e       	mov	r0, r31
      9a8:	f0 e0       	ldi	r31, 0x00	; 0
      9aa:	6f 2e       	mov	r6, r31
      9ac:	f2 e0       	ldi	r31, 0x02	; 2
      9ae:	7f 2e       	mov	r7, r31
      9b0:	f0 2d       	mov	r31, r0
-						{
-							g_wifiRxCurrentIndex = 0;
-							return 0;
-						}
-						else if ((currentIndex >=4) &&  !strncmp(strTemp,"+IPD,",4) )
      9b2:	0f 2e       	mov	r0, r31
      9b4:	fb e0       	ldi	r31, 0x0B	; 11
      9b6:	4f 2e       	mov	r4, r31
      9b8:	f2 e0       	ldi	r31, 0x02	; 2
      9ba:	5f 2e       	mov	r5, r31
      9bc:	f0 2d       	mov	r31, r0
-	OK\r\n
-	*/
-	
-	while(1)
-	{
-		if (g_wifiRxCurrentIndex)
-     9be:	80 91 40 04 	lds	r24, 0x0440
+     9be:	80 91 3a 04 	lds	r24, 0x043A
      9c2:	88 23       	and	r24, r24
      9c4:	e1 f3       	breq	.-8      	; 0x9be <WaitOKWithPrint+0x6a>
-		{
-			for (i = 0; i < g_wifiRxCurrentIndex ; i++)
-     9c6:	80 91 40 04 	lds	r24, 0x0440
+     9c6:	80 91 3a 04 	lds	r24, 0x043A
      9ca:	88 23       	and	r24, r24
      9cc:	09 f4       	brne	.+2      	; 0x9d0 <WaitOKWithPrint+0x7c>
      9ce:	a9 c0       	rjmp	.+338    	; 0xb22 <WaitOKWithPrint+0x1ce>
      9d0:	cc 24       	eor	r12, r12
      9d2:	dd 24       	eor	r13, r13
-						
-						#endif
-						//						debugprint(strTemp);
-						
-					}
-					currentIndex = 0;
      9d4:	88 24       	eor	r8, r8
      9d6:	99 24       	eor	r9, r9
-		if (g_wifiRxCurrentIndex)
-		{
-			for (i = 0; i < g_wifiRxCurrentIndex ; i++)
-			{
-				//
-				strTemp[currentIndex++] = g_wifiRxData[i];
      9d8:	85 01       	movw	r16, r10
      9da:	0c 0d       	add	r16, r12
      9dc:	1d 1d       	adc	r17, r13
@@ -1802,29 +1178,19 @@ int WaitOKWithPrint()
      9f0:	08 94       	sec
      9f2:	e1 1c       	adc	r14, r1
      9f4:	f1 1c       	adc	r15, r1
-				//if((g_wifiRxData[i] !=0x0D) && (g_wifiRxData[i] !=0x0A)   )
-				putCh2(g_wifiRxData[i]);
      9f6:	f8 01       	movw	r30, r16
      9f8:	80 81       	ld	r24, Z
      9fa:	0e 94 96 00 	call	0x12c	; 0x12c <putCh2>
-				
-				if (g_wifiRxData[i] == 0x0A)
      9fe:	f8 01       	movw	r30, r16
      a00:	80 81       	ld	r24, Z
      a02:	8a 30       	cpi	r24, 0x0A	; 10
      a04:	09 f0       	breq	.+2      	; 0xa08 <WaitOKWithPrint+0xb4>
      a06:	83 c0       	rjmp	.+262    	; 0xb0e <WaitOKWithPrint+0x1ba>
-				{
-					//debugprint("\r\n");
-					if ( currentIndex >= 4) // "OK\r\n"
      a08:	f4 e0       	ldi	r31, 0x04	; 4
      a0a:	ef 16       	cp	r14, r31
      a0c:	f1 04       	cpc	r15, r1
      a0e:	0c f4       	brge	.+2      	; 0xa12 <WaitOKWithPrint+0xbe>
      a10:	79 c0       	rjmp	.+242    	; 0xb04 <WaitOKWithPrint+0x1b0>
-					{
-						// check end  "OK\r\n"
-						if (!strncmp((char*)strTemp,"OK",2))
      a12:	ce 01       	movw	r24, r28
      a14:	01 96       	adiw	r24, 0x01	; 1
      a16:	b3 01       	movw	r22, r6
@@ -1836,15 +1202,10 @@ int WaitOKWithPrint()
      a24:	21 15       	cp	r18, r1
      a26:	31 05       	cpc	r19, r1
      a28:	29 f4       	brne	.+10     	; 0xa34 <WaitOKWithPrint+0xe0>
-						{
-							g_wifiRxCurrentIndex = 0;
-     a2a:	10 92 40 04 	sts	0x0440, r1
-							return 0;
+     a2a:	10 92 3a 04 	sts	0x043A, r1
      a2e:	80 e0       	ldi	r24, 0x00	; 0
      a30:	90 e0       	ldi	r25, 0x00	; 0
      a32:	7a c0       	rjmp	.+244    	; 0xb28 <WaitOKWithPrint+0x1d4>
-						}
-						else if ((currentIndex >=4) &&  !strncmp(strTemp,"+IPD,",4) )
      a34:	ce 01       	movw	r24, r28
      a36:	01 96       	adiw	r24, 0x01	; 1
      a38:	b2 01       	movw	r22, r4
@@ -1856,16 +1217,10 @@ int WaitOKWithPrint()
      a46:	21 15       	cp	r18, r1
      a48:	31 05       	cpc	r19, r1
      a4a:	29 f4       	brne	.+10     	; 0xa56 <WaitOKWithPrint+0x102>
-						{
-							g_wifiRxCurrentIndex = 0;
-     a4c:	10 92 40 04 	sts	0x0440, r1
-							//							debugprint("error\r\n");
-							return -1;
+     a4c:	10 92 3a 04 	sts	0x043A, r1
      a50:	8f ef       	ldi	r24, 0xFF	; 255
      a52:	9f ef       	ldi	r25, 0xFF	; 255
      a54:	69 c0       	rjmp	.+210    	; 0xb28 <WaitOKWithPrint+0x1d4>
-						}
-						else if ((currentIndex >= 7) && !strncmp(strTemp,"ERROR",5)  )
      a56:	87 e0       	ldi	r24, 0x07	; 7
      a58:	e8 16       	cp	r14, r24
      a5a:	f1 04       	cpc	r15, r1
@@ -1881,16 +1236,10 @@ int WaitOKWithPrint()
      a70:	21 15       	cp	r18, r1
      a72:	31 05       	cpc	r19, r1
      a74:	29 f4       	brne	.+10     	; 0xa80 <WaitOKWithPrint+0x12c>
-						{
-							g_wifiRxCurrentIndex = 0;
-     a76:	10 92 40 04 	sts	0x0440, r1
-							//							debugprint("error\r\n");
-							return -1;
+     a76:	10 92 3a 04 	sts	0x043A, r1
      a7a:	8f ef       	ldi	r24, 0xFF	; 255
      a7c:	9f ef       	ldi	r25, 0xFF	; 255
      a7e:	54 c0       	rjmp	.+168    	; 0xb28 <WaitOKWithPrint+0x1d4>
-						}
-						else if ((currentIndex >= 6) && !strncmp(strTemp,"FAIL",5)  )
      a80:	e6 e0       	ldi	r30, 0x06	; 6
      a82:	ee 16       	cp	r14, r30
      a84:	f1 04       	cpc	r15, r1
@@ -1907,16 +1256,10 @@ int WaitOKWithPrint()
      a9c:	21 15       	cp	r18, r1
      a9e:	31 05       	cpc	r19, r1
      aa0:	29 f4       	brne	.+10     	; 0xaac <WaitOKWithPrint+0x158>
-						{
-							g_wifiRxCurrentIndex = 0;
-     aa2:	10 92 40 04 	sts	0x0440, r1
-							//							debugprint("fail\r\n");
-							return -1;
+     aa2:	10 92 3a 04 	sts	0x043A, r1
      aa6:	8f ef       	ldi	r24, 0xFF	; 255
      aa8:	9f ef       	ldi	r25, 0xFF	; 255
      aaa:	3e c0       	rjmp	.+124    	; 0xb28 <WaitOKWithPrint+0x1d4>
-						}
-						else if ((currentIndex >= 7) && !strncmp(strTemp,"ALREAY",5)  )
      aac:	f7 e0       	ldi	r31, 0x07	; 7
      aae:	ef 16       	cp	r14, r31
      ab0:	f1 04       	cpc	r15, r1
@@ -1933,15 +1276,10 @@ int WaitOKWithPrint()
      ac8:	21 15       	cp	r18, r1
      aca:	31 05       	cpc	r19, r1
      acc:	29 f4       	brne	.+10     	; 0xad8 <WaitOKWithPrint+0x184>
-						{
-							g_wifiRxCurrentIndex = 0;
-     ace:	10 92 40 04 	sts	0x0440, r1
-							return 0;
+     ace:	10 92 3a 04 	sts	0x043A, r1
      ad2:	80 e0       	ldi	r24, 0x00	; 0
      ad4:	90 e0       	ldi	r25, 0x00	; 0
      ad6:	28 c0       	rjmp	.+80     	; 0xb28 <WaitOKWithPrint+0x1d4>
-						}
-						else if ((currentIndex >= 9) && !strncmp(strTemp,"SEND OK",7)  )
      ad8:	89 e0       	ldi	r24, 0x09	; 9
      ada:	e8 16       	cp	r14, r24
      adc:	f1 04       	cpc	r15, r1
@@ -1958,50 +1296,26 @@ int WaitOKWithPrint()
      af4:	21 15       	cp	r18, r1
      af6:	31 05       	cpc	r19, r1
      af8:	49 f4       	brne	.+18     	; 0xb0c <WaitOKWithPrint+0x1b8>
-						{
-							g_wifiRxCurrentIndex = 0;
-     afa:	10 92 40 04 	sts	0x0440, r1
-							return 0;
+     afa:	10 92 3a 04 	sts	0x043A, r1
      afe:	80 e0       	ldi	r24, 0x00	; 0
      b00:	90 e0       	ldi	r25, 0x00	; 0
      b02:	12 c0       	rjmp	.+36     	; 0xb28 <WaitOKWithPrint+0x1d4>
-						
-						#endif
-						//						debugprint(strTemp);
-						
-					}
-					currentIndex = 0;
      b04:	74 01       	movw	r14, r8
      b06:	03 c0       	rjmp	.+6      	; 0xb0e <WaitOKWithPrint+0x1ba>
      b08:	74 01       	movw	r14, r8
      b0a:	01 c0       	rjmp	.+2      	; 0xb0e <WaitOKWithPrint+0x1ba>
      b0c:	74 01       	movw	r14, r8
-	
-	while(1)
-	{
-		if (g_wifiRxCurrentIndex)
-		{
-			for (i = 0; i < g_wifiRxCurrentIndex ; i++)
      b0e:	08 94       	sec
      b10:	c1 1c       	adc	r12, r1
      b12:	d1 1c       	adc	r13, r1
-     b14:	80 91 40 04 	lds	r24, 0x0440
+     b14:	80 91 3a 04 	lds	r24, 0x043A
      b18:	90 e0       	ldi	r25, 0x00	; 0
      b1a:	c8 16       	cp	r12, r24
      b1c:	d9 06       	cpc	r13, r25
      b1e:	0c f4       	brge	.+2      	; 0xb22 <WaitOKWithPrint+0x1ce>
      b20:	5b cf       	rjmp	.-330    	; 0x9d8 <WaitOKWithPrint+0x84>
-						
-					}
-					currentIndex = 0;
-				}
-			}
-			g_wifiRxCurrentIndex = 0;
-     b22:	10 92 40 04 	sts	0x0440, r1
+     b22:	10 92 3a 04 	sts	0x043A, r1
      b26:	4b cf       	rjmp	.-362    	; 0x9be <WaitOKWithPrint+0x6a>
-		}
-	}
-}
      b28:	c0 50       	subi	r28, 0x00	; 0
      b2a:	de 4f       	sbci	r29, 0xFE	; 254
      b2c:	0f b6       	in	r0, 0x3f	; 63
@@ -2030,10 +1344,6 @@ int WaitOKWithPrint()
      b5a:	08 95       	ret
 
 00000b5c <WaitSendReadyWithoutPrint>:
-
-
-int WaitSendReadyWithoutPrint()
-{
      b5c:	cf 92       	push	r12
      b5e:	df 92       	push	r13
      b60:	ff 92       	push	r15
@@ -2050,103 +1360,35 @@ int WaitSendReadyWithoutPrint()
      b76:	cf 2e       	mov	r12, r31
      b78:	dd 24       	eor	r13, r13
      b7a:	f0 2d       	mov	r31, r0
-	int counter = 0;
-	uint8_t msgBuff[4];
-	uint8_t msgRxNum;
-	int i;
-	uint8_t okFlag =0;
-	uint8_t readyFlag = 0;
      b7c:	00 e0       	ldi	r16, 0x00	; 0
-{
-	int counter = 0;
-	uint8_t msgBuff[4];
-	uint8_t msgRxNum;
-	int i;
-	uint8_t okFlag =0;
      b7e:	ff 24       	eor	r15, r15
-		for(i = 0 ; i< msgRxNum ; i++)
-		{
-			if (msgBuff[i] == MSG_SEND_READY)
-			{
-				
-				readyFlag = 1;
      b80:	11 e0       	ldi	r17, 0x01	; 1
-	int i;
-	uint8_t okFlag =0;
-	uint8_t readyFlag = 0;
-	while(1)
-	{
-		msgRxNum = rxDataProcess(msgBuff,4);
      b82:	ce 01       	movw	r24, r28
      b84:	01 96       	adiw	r24, 0x01	; 1
      b86:	64 e0       	ldi	r22, 0x04	; 4
      b88:	0e 94 19 03 	call	0x632	; 0x632 <rxDataProcess>
-		for(i = 0 ; i< msgRxNum ; i++)
      b8c:	88 23       	and	r24, r24
      b8e:	a1 f0       	breq	.+40     	; 0xbb8 <WaitSendReadyWithoutPrint+0x5c>
      b90:	fe 01       	movw	r30, r28
      b92:	31 96       	adiw	r30, 0x01	; 1
-		}
-	}
-}
-
-
-int WaitSendReadyWithoutPrint()
      b94:	9f 01       	movw	r18, r30
      b96:	28 0f       	add	r18, r24
      b98:	31 1d       	adc	r19, r1
      b9a:	c9 01       	movw	r24, r18
-	while(1)
-	{
-		msgRxNum = rxDataProcess(msgBuff,4);
-		for(i = 0 ; i< msgRxNum ; i++)
-		{
-			if (msgBuff[i] == MSG_SEND_READY)
      b9c:	21 91       	ld	r18, Z+
      b9e:	28 30       	cpi	r18, 0x08	; 8
      ba0:	29 f0       	breq	.+10     	; 0xbac <WaitSendReadyWithoutPrint+0x50>
-			{
-				
-				readyFlag = 1;
-			}
-			else if (msgBuff[i] == MSG_OK)
      ba2:	22 30       	cpi	r18, 0x02	; 2
      ba4:	29 f0       	breq	.+10     	; 0xbb0 <WaitSendReadyWithoutPrint+0x54>
-			{
-				okFlag = 1;
-			}
-			else if (msgBuff[i] == MSG_ERROR)
      ba6:	25 30       	cpi	r18, 0x05	; 5
      ba8:	21 f4       	brne	.+8      	; 0xbb2 <WaitSendReadyWithoutPrint+0x56>
      baa:	26 c0       	rjmp	.+76     	; 0xbf8 <WaitSendReadyWithoutPrint+0x9c>
-		for(i = 0 ; i< msgRxNum ; i++)
-		{
-			if (msgBuff[i] == MSG_SEND_READY)
-			{
-				
-				readyFlag = 1;
      bac:	01 2f       	mov	r16, r17
      bae:	01 c0       	rjmp	.+2      	; 0xbb2 <WaitSendReadyWithoutPrint+0x56>
-			}
-			else if (msgBuff[i] == MSG_OK)
-			{
-				okFlag = 1;
      bb0:	f1 2e       	mov	r15, r17
-	uint8_t okFlag =0;
-	uint8_t readyFlag = 0;
-	while(1)
-	{
-		msgRxNum = rxDataProcess(msgBuff,4);
-		for(i = 0 ; i< msgRxNum ; i++)
      bb2:	e8 17       	cp	r30, r24
      bb4:	f9 07       	cpc	r31, r25
      bb6:	91 f7       	brne	.-28     	; 0xb9c <WaitSendReadyWithoutPrint+0x40>
-			else if (msgBuff[i] == MSG_ERROR)
-			{
-				return -1;
-			}
-		}
-		if ( readyFlag && okFlag )
      bb8:	00 23       	and	r16, r16
      bba:	11 f0       	breq	.+4      	; 0xbc0 <WaitSendReadyWithoutPrint+0x64>
      bbc:	ff 20       	and	r15, r15
@@ -2154,17 +1396,9 @@ int WaitSendReadyWithoutPrint()
      bc0:	08 94       	sec
      bc2:	c1 08       	sbc	r12, r1
      bc4:	d1 08       	sbc	r13, r1
-		{
-			return 0;
-		}
-		
-		counter++;
-		if (counter> 100)
      bc6:	c1 14       	cp	r12, r1
      bc8:	d1 04       	cpc	r13, r1
      bca:	79 f4       	brne	.+30     	; 0xbea <WaitSendReadyWithoutPrint+0x8e>
-		{
-			debugprint("WaitSendReadyWithoutPrint counter err\r\n");
      bcc:	0f 92       	push	r0
      bce:	0f 92       	push	r0
      bd0:	83 e3       	ldi	r24, 0x33	; 51
@@ -2174,7 +1408,6 @@ int WaitSendReadyWithoutPrint()
      bd8:	92 83       	std	Z+2, r25	; 0x02
      bda:	81 83       	std	Z+1, r24	; 0x01
      bdc:	0e 94 df 00 	call	0x1be	; 0x1be <debugprint>
-			return -1;
      be0:	0f 90       	pop	r0
      be2:	0f 90       	pop	r0
      be4:	8f ef       	ldi	r24, 0xFF	; 255
@@ -2187,28 +1420,11 @@ int WaitSendReadyWithoutPrint()
      bf2:	00 c0       	rjmp	.+0      	; 0xbf4 <WaitSendReadyWithoutPrint+0x98>
      bf4:	00 00       	nop
      bf6:	c5 cf       	rjmp	.-118    	; 0xb82 <WaitSendReadyWithoutPrint+0x26>
-			{
-				okFlag = 1;
-			}
-			else if (msgBuff[i] == MSG_ERROR)
-			{
-				return -1;
      bf8:	8f ef       	ldi	r24, 0xFF	; 255
      bfa:	9f ef       	ldi	r25, 0xFF	; 255
      bfc:	02 c0       	rjmp	.+4      	; 0xc02 <WaitSendReadyWithoutPrint+0xa6>
-			}
-		}
-		if ( readyFlag && okFlag )
-		{
-			return 0;
      bfe:	80 e0       	ldi	r24, 0x00	; 0
      c00:	90 e0       	ldi	r25, 0x00	; 0
-			return -1;
-		}
-		
-		_delay_ms(10);
-	}
-}
      c02:	0f 90       	pop	r0
      c04:	0f 90       	pop	r0
      c06:	0f 90       	pop	r0
@@ -2223,9 +1439,6 @@ int WaitSendReadyWithoutPrint()
      c18:	08 95       	ret
 
 00000c1a <WaitSendOKWithoutPrint>:
-
-int WaitSendOKWithoutPrint()
-{
      c1a:	0f 93       	push	r16
      c1c:	1f 93       	push	r17
      c1e:	cf 93       	push	r28
@@ -2236,36 +1449,19 @@ int WaitSendOKWithoutPrint()
      c28:	de b7       	in	r29, 0x3e	; 62
      c2a:	05 e6       	ldi	r16, 0x65	; 101
      c2c:	10 e0       	ldi	r17, 0x00	; 0
-	uint8_t msgBuff[4];
-	uint8_t msgRxNum;
-	int i;
-	while(1)
-	{
-		msgRxNum = rxDataProcess(msgBuff,4);
      c2e:	ce 01       	movw	r24, r28
      c30:	01 96       	adiw	r24, 0x01	; 1
      c32:	64 e0       	ldi	r22, 0x04	; 4
      c34:	0e 94 19 03 	call	0x632	; 0x632 <rxDataProcess>
-		for(i = 0 ; i< msgRxNum ; i++)
      c38:	88 23       	and	r24, r24
      c3a:	b9 f0       	breq	.+46     	; 0xc6a <WaitSendOKWithoutPrint+0x50>
-		{
-			if (msgBuff[i] == MSG_SEND_OK)
      c3c:	99 81       	ldd	r25, Y+1	; 0x01
      c3e:	91 30       	cpi	r25, 0x01	; 1
      c40:	69 f1       	breq	.+90     	; 0xc9c <WaitSendOKWithoutPrint+0x82>
-			return 0;
-			else if (msgBuff[i] == MSG_ERROR)
      c42:	95 30       	cpi	r25, 0x05	; 5
      c44:	71 f1       	breq	.+92     	; 0xca2 <WaitSendOKWithoutPrint+0x88>
      c46:	fe 01       	movw	r30, r28
      c48:	32 96       	adiw	r30, 0x02	; 2
-		
-		_delay_ms(10);
-	}
-}
-
-int WaitSendOKWithoutPrint()
      c4a:	21 e0       	ldi	r18, 0x01	; 1
      c4c:	30 e0       	ldi	r19, 0x00	; 0
      c4e:	2c 0f       	add	r18, r28
@@ -2274,39 +1470,17 @@ int WaitSendOKWithoutPrint()
      c54:	31 1d       	adc	r19, r1
      c56:	c9 01       	movw	r24, r18
      c58:	05 c0       	rjmp	.+10     	; 0xc64 <WaitSendOKWithoutPrint+0x4a>
-	while(1)
-	{
-		msgRxNum = rxDataProcess(msgBuff,4);
-		for(i = 0 ; i< msgRxNum ; i++)
-		{
-			if (msgBuff[i] == MSG_SEND_OK)
      c5a:	21 91       	ld	r18, Z+
      c5c:	21 30       	cpi	r18, 0x01	; 1
      c5e:	21 f1       	breq	.+72     	; 0xca8 <WaitSendOKWithoutPrint+0x8e>
-			return 0;
-			else if (msgBuff[i] == MSG_ERROR)
      c60:	25 30       	cpi	r18, 0x05	; 5
      c62:	29 f1       	breq	.+74     	; 0xcae <WaitSendOKWithoutPrint+0x94>
-	uint8_t msgRxNum;
-	int i;
-	while(1)
-	{
-		msgRxNum = rxDataProcess(msgBuff,4);
-		for(i = 0 ; i< msgRxNum ; i++)
      c64:	e8 17       	cp	r30, r24
      c66:	f9 07       	cpc	r31, r25
      c68:	c1 f7       	brne	.-16     	; 0xc5a <WaitSendOKWithoutPrint+0x40>
      c6a:	01 50       	subi	r16, 0x01	; 1
      c6c:	10 40       	sbci	r17, 0x00	; 0
-			else if (msgBuff[i] == MSG_ERROR)
-			return -1;
-		}
-		
-		counter++;
-		if (counter> 100)
      c6e:	79 f4       	brne	.+30     	; 0xc8e <WaitSendOKWithoutPrint+0x74>
-		{
-			debugprint("WaitOKWithoutPrint counter err\r\n");
      c70:	0f 92       	push	r0
      c72:	0f 92       	push	r0
      c74:	8b e5       	ldi	r24, 0x5B	; 91
@@ -2316,7 +1490,6 @@ int WaitSendOKWithoutPrint()
      c7c:	92 83       	std	Z+2, r25	; 0x02
      c7e:	81 83       	std	Z+1, r24	; 0x01
      c80:	0e 94 df 00 	call	0x1be	; 0x1be <debugprint>
-			return -1;
      c84:	0f 90       	pop	r0
      c86:	0f 90       	pop	r0
      c88:	8f ef       	ldi	r24, 0xFF	; 255
@@ -2329,39 +1502,17 @@ int WaitSendOKWithoutPrint()
      c96:	00 c0       	rjmp	.+0      	; 0xc98 <WaitSendOKWithoutPrint+0x7e>
      c98:	00 00       	nop
      c9a:	c9 cf       	rjmp	.-110    	; 0xc2e <WaitSendOKWithoutPrint+0x14>
-	{
-		msgRxNum = rxDataProcess(msgBuff,4);
-		for(i = 0 ; i< msgRxNum ; i++)
-		{
-			if (msgBuff[i] == MSG_SEND_OK)
-			return 0;
      c9c:	80 e0       	ldi	r24, 0x00	; 0
      c9e:	90 e0       	ldi	r25, 0x00	; 0
      ca0:	08 c0       	rjmp	.+16     	; 0xcb2 <WaitSendOKWithoutPrint+0x98>
-			else if (msgBuff[i] == MSG_ERROR)
-			return -1;
      ca2:	8f ef       	ldi	r24, 0xFF	; 255
      ca4:	9f ef       	ldi	r25, 0xFF	; 255
      ca6:	05 c0       	rjmp	.+10     	; 0xcb2 <WaitSendOKWithoutPrint+0x98>
-	{
-		msgRxNum = rxDataProcess(msgBuff,4);
-		for(i = 0 ; i< msgRxNum ; i++)
-		{
-			if (msgBuff[i] == MSG_SEND_OK)
-			return 0;
      ca8:	80 e0       	ldi	r24, 0x00	; 0
      caa:	90 e0       	ldi	r25, 0x00	; 0
      cac:	02 c0       	rjmp	.+4      	; 0xcb2 <WaitSendOKWithoutPrint+0x98>
-			else if (msgBuff[i] == MSG_ERROR)
-			return -1;
      cae:	8f ef       	ldi	r24, 0xFF	; 255
      cb0:	9f ef       	ldi	r25, 0xFF	; 255
-			return -1;
-		}
-		_delay_ms(10);
-		
-	}
-}
      cb2:	0f 90       	pop	r0
      cb4:	0f 90       	pop	r0
      cb6:	0f 90       	pop	r0
@@ -2373,9 +1524,6 @@ int WaitSendOKWithoutPrint()
      cc2:	08 95       	ret
 
 00000cc4 <WaitOk>:
-
-int WaitOk() //"\r\nOK\r\n"
-{
      cc4:	cf 92       	push	r12
      cc6:	df 92       	push	r13
      cc8:	ef 92       	push	r14
@@ -2393,93 +1541,38 @@ int WaitOk() //"\r\nOK\r\n"
      ce0:	de bf       	out	0x3e, r29	; 62
      ce2:	0f be       	out	0x3f, r0	; 63
      ce4:	cd bf       	out	0x3d, r28	; 61
-	uint8_t strTemp[256];
-	int currentIndex = 0;
-	uint8_t firstCarrageReturnDetect = 0;
      ce6:	dd 24       	eor	r13, r13
-}
-
-int WaitOk() //"\r\nOK\r\n"
-{
-	uint8_t strTemp[256];
-	int currentIndex = 0;
      ce8:	40 e0       	ldi	r20, 0x00	; 0
      cea:	50 e0       	ldi	r21, 0x00	; 0
-		_delay_ms(10);
-		
-	}
-}
-
-int WaitOk() //"\r\nOK\r\n"
      cec:	be 01       	movw	r22, r28
      cee:	6f 5f       	subi	r22, 0xFF	; 255
      cf0:	7f 4f       	sbci	r23, 0xFF	; 255
      cf2:	ee 24       	eor	r14, r14
      cf4:	ff 24       	eor	r15, r15
-	{
-		if (g_wifiRxCurrentIndex)
-		{
-			for (i = 0; i < g_wifiRxCurrentIndex ; i++)
-			{
-				strTemp[currentIndex++] = g_wifiRxData[i];
-     cf6:	0a e8       	ldi	r16, 0x8A	; 138
+     cf6:	04 e8       	ldi	r16, 0x84	; 132
      cf8:	16 e0       	ldi	r17, 0x06	; 6
-				if (g_wifiRxData[i] == 0x0A)
-				{
-					if ( !firstCarrageReturnDetect )
-					{
-						firstCarrageReturnDetect = 1;
      cfa:	cc 24       	eor	r12, r12
      cfc:	c3 94       	inc	r12
-	uint8_t firstCarrageReturnDetect = 0;
-	int i;
-	
-	while(1)
-	{
-		if (g_wifiRxCurrentIndex)
-     cfe:	80 91 40 04 	lds	r24, 0x0440
+     cfe:	80 91 3a 04 	lds	r24, 0x043A
      d02:	88 23       	and	r24, r24
      d04:	e1 f3       	breq	.-8      	; 0xcfe <WaitOk+0x3a>
-		{
-			for (i = 0; i < g_wifiRxCurrentIndex ; i++)
-     d06:	80 91 40 04 	lds	r24, 0x0440
+     d06:	80 91 3a 04 	lds	r24, 0x043A
      d0a:	88 23       	and	r24, r24
      d0c:	c1 f3       	breq	.-16     	; 0xcfe <WaitOk+0x3a>
-		_delay_ms(10);
-		
-	}
-}
-
-int WaitOk() //"\r\nOK\r\n"
      d0e:	db 01       	movw	r26, r22
      d10:	a4 0f       	add	r26, r20
      d12:	b5 1f       	adc	r27, r21
      d14:	97 01       	movw	r18, r14
-	{
-		if (g_wifiRxCurrentIndex)
-		{
-			for (i = 0; i < g_wifiRxCurrentIndex ; i++)
-			{
-				strTemp[currentIndex++] = g_wifiRxData[i];
      d16:	f8 01       	movw	r30, r16
      d18:	e2 0f       	add	r30, r18
      d1a:	f3 1f       	adc	r31, r19
      d1c:	80 81       	ld	r24, Z
      d1e:	8d 93       	st	X+, r24
-				if (g_wifiRxData[i] == 0x0A)
      d20:	80 81       	ld	r24, Z
      d22:	8a 30       	cpi	r24, 0x0A	; 10
      d24:	39 f5       	brne	.+78     	; 0xd74 <WaitOk+0xb0>
-				{
-					if ( !firstCarrageReturnDetect )
      d26:	dd 20       	and	r13, r13
      d28:	21 f1       	breq	.+72     	; 0xd72 <WaitOk+0xae>
-						firstCarrageReturnDetect = 1;
-					}
-					else
-					{
-						// check end  "OK\r\n"
-						if (!strncmp(strTemp+2,"OK",2))
      d2a:	ce 01       	movw	r24, r28
      d2c:	03 96       	adiw	r24, 0x03	; 3
      d2e:	60 e0       	ldi	r22, 0x00	; 0
@@ -2492,15 +1585,10 @@ int WaitOk() //"\r\nOK\r\n"
      d3e:	21 15       	cp	r18, r1
      d40:	31 05       	cpc	r19, r1
      d42:	29 f4       	brne	.+10     	; 0xd4e <WaitOk+0x8a>
-						{
-							g_wifiRxCurrentIndex = 0;
-     d44:	10 92 40 04 	sts	0x0440, r1
-							return 0;
+     d44:	10 92 3a 04 	sts	0x043A, r1
      d48:	80 e0       	ldi	r24, 0x00	; 0
      d4a:	90 e0       	ldi	r25, 0x00	; 0
      d4c:	22 c0       	rjmp	.+68     	; 0xd92 <WaitOk+0xce>
-						}
-						else if (!strncmp(strTemp+2,"ERROR",5)  )
      d4e:	ce 01       	movw	r24, r28
      d50:	03 96       	adiw	r24, 0x03	; 3
      d52:	61 e1       	ldi	r22, 0x11	; 17
@@ -2513,58 +1601,25 @@ int WaitOk() //"\r\nOK\r\n"
      d62:	21 15       	cp	r18, r1
      d64:	31 05       	cpc	r19, r1
      d66:	99 f4       	brne	.+38     	; 0xd8e <WaitOk+0xca>
-						{
-							g_wifiRxCurrentIndex = 0;
-     d68:	10 92 40 04 	sts	0x0440, r1
-							return -1;
+     d68:	10 92 3a 04 	sts	0x043A, r1
      d6c:	8f ef       	ldi	r24, 0xFF	; 255
      d6e:	9f ef       	ldi	r25, 0xFF	; 255
      d70:	10 c0       	rjmp	.+32     	; 0xd92 <WaitOk+0xce>
-				strTemp[currentIndex++] = g_wifiRxData[i];
-				if (g_wifiRxData[i] == 0x0A)
-				{
-					if ( !firstCarrageReturnDetect )
-					{
-						firstCarrageReturnDetect = 1;
      d72:	dc 2c       	mov	r13, r12
-		_delay_ms(10);
-		
-	}
-}
-
-int WaitOk() //"\r\nOK\r\n"
      d74:	ad 01       	movw	r20, r26
      d76:	46 1b       	sub	r20, r22
      d78:	57 0b       	sbc	r21, r23
-	
-	while(1)
-	{
-		if (g_wifiRxCurrentIndex)
-		{
-			for (i = 0; i < g_wifiRxCurrentIndex ; i++)
      d7a:	2f 5f       	subi	r18, 0xFF	; 255
      d7c:	3f 4f       	sbci	r19, 0xFF	; 255
-     d7e:	80 91 40 04 	lds	r24, 0x0440
+     d7e:	80 91 3a 04 	lds	r24, 0x043A
      d82:	90 e0       	ldi	r25, 0x00	; 0
      d84:	28 17       	cp	r18, r24
      d86:	39 07       	cpc	r19, r25
      d88:	0c f0       	brlt	.+2      	; 0xd8c <WaitOk+0xc8>
      d8a:	b9 cf       	rjmp	.-142    	; 0xcfe <WaitOk+0x3a>
      d8c:	c4 cf       	rjmp	.-120    	; 0xd16 <WaitOk+0x52>
-						else if (!strncmp(strTemp+2,"ERROR",5)  )
-						{
-							g_wifiRxCurrentIndex = 0;
-							return -1;
-						}
-						return -1;
      d8e:	8f ef       	ldi	r24, 0xFF	; 255
      d90:	9f ef       	ldi	r25, 0xFF	; 255
-				}
-			}
-		}
-	}
-	return -1;
-}
      d92:	c0 50       	subi	r28, 0x00	; 0
      d94:	df 4f       	sbci	r29, 0xFF	; 255
      d96:	0f b6       	in	r0, 0x3f	; 63
@@ -2583,10 +1638,6 @@ int WaitOk() //"\r\nOK\r\n"
      db0:	08 95       	ret
 
 00000db2 <wifiDisplayAPlist>:
-
-int wifiDisplayAPlist()
-{
-	wifiprint("AT+CWLAP\r\n");
      db2:	0f 92       	push	r0
      db4:	0f 92       	push	r0
      db6:	8c e7       	ldi	r24, 0x7C	; 124
@@ -2607,19 +1658,12 @@ int wifiDisplayAPlist()
      dd6:	e1 f7       	brne	.-8      	; 0xdd0 <wifiDisplayAPlist+0x1e>
      dd8:	00 c0       	rjmp	.+0      	; 0xdda <wifiDisplayAPlist+0x28>
      dda:	00 00       	nop
-	_delay_ms(2000);
-	return WaitOKWithPrint();
      ddc:	0f 90       	pop	r0
      dde:	0f 90       	pop	r0
      de0:	0e 94 aa 04 	call	0x954	; 0x954 <WaitOKWithPrint>
-}
      de4:	08 95       	ret
 
 00000de6 <wifiConnectAP>:
-
-uint8_t wifiConnectAP(char* ssid, char* pwd)
-{
-	wifiprint("AT+CWJAP_DEF=\"%s\",\"%s\"\r\n",ssid,pwd);
      de6:	00 d0       	rcall	.+0      	; 0xde8 <wifiConnectAP+0x2>
      de8:	00 d0       	rcall	.+0      	; 0xdea <wifiConnectAP+0x4>
      dea:	ed b7       	in	r30, 0x3d	; 61
@@ -2638,8 +1682,6 @@ uint8_t wifiConnectAP(char* ssid, char* pwd)
      e04:	75 83       	std	Z+5, r23	; 0x05
      e06:	64 83       	std	Z+4, r22	; 0x04
      e08:	0e 94 a8 01 	call	0x350	; 0x350 <wifiprint>
-	
-	return WaitOKWithPrint();
      e0c:	8d b7       	in	r24, 0x3d	; 61
      e0e:	9e b7       	in	r25, 0x3e	; 62
      e10:	06 96       	adiw	r24, 0x06	; 6
@@ -2649,15 +1691,9 @@ uint8_t wifiConnectAP(char* ssid, char* pwd)
      e18:	0f be       	out	0x3f, r0	; 63
      e1a:	8d bf       	out	0x3d, r24	; 61
      e1c:	0e 94 aa 04 	call	0x954	; 0x954 <WaitOKWithPrint>
-}
      e20:	08 95       	ret
 
 00000e22 <wifiModeSet>:
-
-
-uint8_t wifiModeSet()
-{
-	wifiprint("AT+CWMODE=3\r\n");
      e22:	0f 92       	push	r0
      e24:	0f 92       	push	r0
      e26:	80 ea       	ldi	r24, 0xA0	; 160
@@ -2667,19 +1703,12 @@ uint8_t wifiModeSet()
      e2e:	92 83       	std	Z+2, r25	; 0x02
      e30:	81 83       	std	Z+1, r24	; 0x01
      e32:	0e 94 a8 01 	call	0x350	; 0x350 <wifiprint>
-	return WaitOKWithPrint();
      e36:	0f 90       	pop	r0
      e38:	0f 90       	pop	r0
      e3a:	0e 94 aa 04 	call	0x954	; 0x954 <WaitOKWithPrint>
-
-}
      e3e:	08 95       	ret
 
 00000e40 <wifiDisplayLocalIP>:
-
-uint8_t wifiDisplayLocalIP()
-{
-	wifiprint("AT+CIPSTA_CUR?\r\n");
      e40:	0f 92       	push	r0
      e42:	0f 92       	push	r0
      e44:	8e ea       	ldi	r24, 0xAE	; 174
@@ -2689,18 +1718,12 @@ uint8_t wifiDisplayLocalIP()
      e4c:	92 83       	std	Z+2, r25	; 0x02
      e4e:	81 83       	std	Z+1, r24	; 0x01
      e50:	0e 94 a8 01 	call	0x350	; 0x350 <wifiprint>
-	return WaitOKWithPrint();
      e54:	0f 90       	pop	r0
      e56:	0f 90       	pop	r0
      e58:	0e 94 aa 04 	call	0x954	; 0x954 <WaitOKWithPrint>
-}
      e5c:	08 95       	ret
 
 00000e5e <wifiEnableDHCP>:
-
-uint8_t wifiEnableDHCP()
-{
-	wifiprint("AT+CWDHCP_CUR=1,1\r\n");
      e5e:	0f 92       	push	r0
      e60:	0f 92       	push	r0
      e62:	8f eb       	ldi	r24, 0xBF	; 191
@@ -2710,20 +1733,12 @@ uint8_t wifiEnableDHCP()
      e6a:	92 83       	std	Z+2, r25	; 0x02
      e6c:	81 83       	std	Z+1, r24	; 0x01
      e6e:	0e 94 a8 01 	call	0x350	; 0x350 <wifiprint>
-	return WaitOKWithPrint();
      e72:	0f 90       	pop	r0
      e74:	0f 90       	pop	r0
      e76:	0e 94 aa 04 	call	0x954	; 0x954 <WaitOKWithPrint>
-
-}
      e7a:	08 95       	ret
 
 00000e7c <wifiConnectTCPServer>:
-
-
-uint8_t wifiConnectTCPServer(char* remoteIP,uint32_t remotePort)
-{
-	wifiprint("AT+CIPSTART=\"TCP\",\"%s\",%u\r\n",remoteIP, remotePort);
      e7c:	2d b7       	in	r18, 0x3d	; 61
      e7e:	3e b7       	in	r19, 0x3e	; 62
      e80:	28 50       	subi	r18, 0x08	; 8
@@ -2751,8 +1766,6 @@ uint8_t wifiConnectTCPServer(char* remoteIP,uint32_t remotePort)
      eac:	66 83       	std	Z+6, r22	; 0x06
      eae:	77 83       	std	Z+7, r23	; 0x07
      eb0:	0e 94 a8 01 	call	0x350	; 0x350 <wifiprint>
-	
-	return WaitOKWithPrint();
      eb4:	2d b7       	in	r18, 0x3d	; 61
      eb6:	3e b7       	in	r19, 0x3e	; 62
      eb8:	28 5f       	subi	r18, 0xF8	; 248
@@ -2763,26 +1776,15 @@ uint8_t wifiConnectTCPServer(char* remoteIP,uint32_t remotePort)
      ec2:	0f be       	out	0x3f, r0	; 63
      ec4:	2d bf       	out	0x3d, r18	; 61
      ec6:	0e 94 aa 04 	call	0x954	; 0x954 <WaitOKWithPrint>
-}
      eca:	08 95       	ret
 
 00000ecc <wifiSetEventCallback>:
-
-
-uint8_t wifiSetEventCallback(void* func)
-{
-	callbackFnc = func;
-     ecc:	90 93 8b 0a 	sts	0x0A8B, r25
-     ed0:	80 93 8a 0a 	sts	0x0A8A, r24
-	return 0;
-}
+     ecc:	90 93 85 0a 	sts	0x0A85, r25
+     ed0:	80 93 84 0a 	sts	0x0A84, r24
      ed4:	80 e0       	ldi	r24, 0x00	; 0
      ed6:	08 95       	ret
 
 00000ed8 <wifiSendData>:
-
-int wifiSendData(uint8_t* buff, int dataSize)
-{
      ed8:	ef 92       	push	r14
      eda:	ff 92       	push	r15
      edc:	0f 93       	push	r16
@@ -2792,12 +1794,6 @@ int wifiSendData(uint8_t* buff, int dataSize)
      ee4:	08 2f       	mov	r16, r24
      ee6:	19 2f       	mov	r17, r25
      ee8:	eb 01       	movw	r28, r22
-	if (0 )
-	{
-		debugprint("wifiSendData err. rx processing ,g_wifiRxCurrentIndex:%d\r\n",g_wifiRxCurrentIndex);
-		return -1;
-	}
-	wifiprint("AT+CIPSEND=%d\r\n",dataSize);
      eea:	00 d0       	rcall	.+0      	; 0xeec <wifiSendData+0x14>
      eec:	0f 92       	push	r0
      eee:	8f ee       	ldi	r24, 0xEF	; 239
@@ -2813,7 +1809,6 @@ int wifiSendData(uint8_t* buff, int dataSize)
      f02:	6e 93       	st	-X, r22
      f04:	13 97       	sbiw	r26, 0x03	; 3
      f06:	0e 94 a8 01 	call	0x350	; 0x350 <wifiprint>
-	if ( WaitSendReadyWithoutPrint() < 0 )
      f0a:	0f 90       	pop	r0
      f0c:	0f 90       	pop	r0
      f0e:	0f 90       	pop	r0
@@ -2821,23 +1816,11 @@ int wifiSendData(uint8_t* buff, int dataSize)
      f12:	0e 94 ae 05 	call	0xb5c	; 0xb5c <WaitSendReadyWithoutPrint>
      f16:	99 23       	and	r25, r25
      f18:	2c f0       	brlt	.+10     	; 0xf24 <wifiSendData+0x4c>
-		}
-		#endif
-		return -1;
-	}
-	
-	for(int i = 0; i < dataSize ; i++ )
      f1a:	1c 16       	cp	r1, r28
      f1c:	1d 06       	cpc	r1, r29
      f1e:	0c f4       	brge	.+2      	; 0xf22 <wifiSendData+0x4a>
      f20:	4a c0       	rjmp	.+148    	; 0xfb6 <wifiSendData+0xde>
      f22:	57 c0       	rjmp	.+174    	; 0xfd2 <wifiSendData+0xfa>
-		return -1;
-	}
-	wifiprint("AT+CIPSEND=%d\r\n",dataSize);
-	if ( WaitSendReadyWithoutPrint() < 0 )
-	{
-		debugprint("wifiSendData wait err -0");
      f24:	0f 92       	push	r0
      f26:	0f 92       	push	r0
      f28:	8f ef       	ldi	r24, 0xFF	; 255
@@ -2847,8 +1830,6 @@ int wifiSendData(uint8_t* buff, int dataSize)
      f30:	92 83       	std	Z+2, r25	; 0x02
      f32:	81 83       	std	Z+1, r24	; 0x01
      f34:	0e 94 df 00 	call	0x1be	; 0x1be <debugprint>
-		#if 1 // test
-		debugprint("&:");
      f38:	88 e1       	ldi	r24, 0x18	; 24
      f3a:	93 e0       	ldi	r25, 0x03	; 3
      f3c:	ad b7       	in	r26, 0x3d	; 61
@@ -2858,9 +1839,8 @@ int wifiSendData(uint8_t* buff, int dataSize)
      f44:	8e 93       	st	-X, r24
      f46:	11 97       	sbiw	r26, 0x01	; 1
      f48:	0e 94 df 00 	call	0x1be	; 0x1be <debugprint>
-		for(int i = 0; i <g_rxDataLen;i++)
-     f4c:	80 91 3b 04 	lds	r24, 0x043B
-     f50:	90 91 3c 04 	lds	r25, 0x043C
+     f4c:	80 91 35 04 	lds	r24, 0x0435
+     f50:	90 91 36 04 	lds	r25, 0x0436
      f54:	0f 90       	pop	r0
      f56:	0f 90       	pop	r0
      f58:	18 16       	cp	r1, r24
@@ -2868,10 +1848,7 @@ int wifiSendData(uint8_t* buff, int dataSize)
      f5c:	ec f5       	brge	.+122    	; 0xfd8 <wifiSendData+0x100>
      f5e:	c0 e0       	ldi	r28, 0x00	; 0
      f60:	d0 e0       	ldi	r29, 0x00	; 0
-		{
-			//putCh2(g_wifiRxData[i]);
-			debugprint("[%02X]",g_rxDataBuff[i]);
-     f62:	0a e8       	ldi	r16, 0x8A	; 138
+     f62:	04 e8       	ldi	r16, 0x84	; 132
      f64:	18 e0       	ldi	r17, 0x08	; 8
      f66:	0f 2e       	mov	r0, r31
      f68:	fb e1       	ldi	r31, 0x1B	; 27
@@ -2897,15 +1874,9 @@ int wifiSendData(uint8_t* buff, int dataSize)
      f90:	82 83       	std	Z+2, r24	; 0x02
      f92:	13 82       	std	Z+3, r1	; 0x03
      f94:	0e 94 df 00 	call	0x1be	; 0x1be <debugprint>
-	if ( WaitSendReadyWithoutPrint() < 0 )
-	{
-		debugprint("wifiSendData wait err -0");
-		#if 1 // test
-		debugprint("&:");
-		for(int i = 0; i <g_rxDataLen;i++)
      f98:	21 96       	adiw	r28, 0x01	; 1
-     f9a:	80 91 3b 04 	lds	r24, 0x043B
-     f9e:	90 91 3c 04 	lds	r25, 0x043C
+     f9a:	80 91 35 04 	lds	r24, 0x0435
+     f9e:	90 91 36 04 	lds	r25, 0x0436
      fa2:	0f 90       	pop	r0
      fa4:	0f 90       	pop	r0
      fa6:	0f 90       	pop	r0
@@ -2913,71 +1884,26 @@ int wifiSendData(uint8_t* buff, int dataSize)
      faa:	c8 17       	cp	r28, r24
      fac:	d9 07       	cpc	r29, r25
      fae:	0c f3       	brlt	.-62     	; 0xf72 <wifiSendData+0x9a>
-		{
-			//putCh2(g_wifiRxData[i]);
-			debugprint("[%02X]",g_rxDataBuff[i]);
-		}
-		#endif
-		return -1;
      fb0:	8f ef       	ldi	r24, 0xFF	; 255
      fb2:	9f ef       	ldi	r25, 0xFF	; 255
      fb4:	13 c0       	rjmp	.+38     	; 0xfdc <wifiSendData+0x104>
-	if ( WaitSendReadyWithoutPrint() < 0 )
-	{
-		debugprint("wifiSendData wait err -0");
-		#if 1 // test
-		debugprint("&:");
-		for(int i = 0; i <g_rxDataLen;i++)
      fb6:	e0 2e       	mov	r14, r16
      fb8:	f1 2e       	mov	r15, r17
-		}
-		#endif
-		return -1;
-	}
-	
-	for(int i = 0; i < dataSize ; i++ )
      fba:	00 e0       	ldi	r16, 0x00	; 0
      fbc:	10 e0       	ldi	r17, 0x00	; 0
-	{
-		
-		putCh0(buff[i]);
      fbe:	f7 01       	movw	r30, r14
      fc0:	81 91       	ld	r24, Z+
      fc2:	7f 01       	movw	r14, r30
      fc4:	0e 94 24 01 	call	0x248	; 0x248 <putCh0>
-		}
-		#endif
-		return -1;
-	}
-	
-	for(int i = 0; i < dataSize ; i++ )
      fc8:	0f 5f       	subi	r16, 0xFF	; 255
      fca:	1f 4f       	sbci	r17, 0xFF	; 255
      fcc:	0c 17       	cp	r16, r28
      fce:	1d 07       	cpc	r17, r29
      fd0:	b1 f7       	brne	.-20     	; 0xfbe <wifiSendData+0xe6>
-	{
-		
-		putCh0(buff[i]);
-	}
-	
-	return WaitSendOKWithoutPrint();
      fd2:	0e 94 0d 06 	call	0xc1a	; 0xc1a <WaitSendOKWithoutPrint>
      fd6:	02 c0       	rjmp	.+4      	; 0xfdc <wifiSendData+0x104>
-		{
-			//putCh2(g_wifiRxData[i]);
-			debugprint("[%02X]",g_rxDataBuff[i]);
-		}
-		#endif
-		return -1;
      fd8:	8f ef       	ldi	r24, 0xFF	; 255
      fda:	9f ef       	ldi	r25, 0xFF	; 255
-		putCh0(buff[i]);
-	}
-	
-	return WaitSendOKWithoutPrint();
-	
-}
      fdc:	df 91       	pop	r29
      fde:	cf 91       	pop	r28
      fe0:	1f 91       	pop	r17
@@ -2987,22 +1913,12 @@ int wifiSendData(uint8_t* buff, int dataSize)
      fe8:	08 95       	ret
 
 00000fea <wificlearUartBuff>:
-
-void wificlearUartBuff()
-{
-	g_wifiRxCurrentIndex = 0;
-     fea:	10 92 40 04 	sts	0x0440, r1
-	g_rxDataLen = 0;
-     fee:	10 92 3c 04 	sts	0x043C, r1
-     ff2:	10 92 3b 04 	sts	0x043B, r1
-}
+     fea:	10 92 3a 04 	sts	0x043A, r1
+     fee:	10 92 36 04 	sts	0x0436, r1
+     ff2:	10 92 35 04 	sts	0x0435, r1
      ff6:	08 95       	ret
 
 00000ff8 <wifiAutoConnectDisable>:
-
-void wifiAutoConnectDisable()
-{
-	wifiprint("AT+CWAUTOCONN=0\r\n");
      ff8:	0f 92       	push	r0
      ffa:	0f 92       	push	r0
      ffc:	82 e2       	ldi	r24, 0x22	; 34
@@ -3023,20 +1939,12 @@ void wifiAutoConnectDisable()
     101c:	e1 f7       	brne	.-8      	; 0x1016 <wifiAutoConnectDisable+0x1e>
     101e:	00 c0       	rjmp	.+0      	; 0x1020 <wifiAutoConnectDisable+0x28>
     1020:	00 00       	nop
-
-	_delay_ms(50);
-	WaitOk();
     1022:	0f 90       	pop	r0
     1024:	0f 90       	pop	r0
     1026:	0e 94 62 06 	call	0xcc4	; 0xcc4 <WaitOk>
-}
     102a:	08 95       	ret
 
 0000102c <wifiEchoDisable>:
-
-void wifiEchoDisable()
-{
-	wifiprint("ATE0\r\n");
     102c:	0f 92       	push	r0
     102e:	0f 92       	push	r0
     1030:	84 e3       	ldi	r24, 0x34	; 52
@@ -3057,23 +1965,12 @@ void wifiEchoDisable()
     1050:	e1 f7       	brne	.-8      	; 0x104a <wifiEchoDisable+0x1e>
     1052:	00 c0       	rjmp	.+0      	; 0x1054 <wifiEchoDisable+0x28>
     1054:	00 00       	nop
-	_delay_ms(100);
-	
-	wificlearUartBuff();
     1056:	0f 90       	pop	r0
     1058:	0f 90       	pop	r0
     105a:	0e 94 f5 07 	call	0xfea	; 0xfea <wificlearUartBuff>
-	
-}
     105e:	08 95       	ret
 
 00001060 <__vector_23>:
-
-volatile uint32_t timerCouter = 0; 
-volatile uint32_t setTimerCheckCounter = 0;
-volatile uint8_t  flagOverflowSetTimer = 0;
-  
-ISR(TIMER0_OVF_vect) {
     1060:	1f 92       	push	r1
     1062:	0f 92       	push	r0
     1064:	0f b6       	in	r0, 0x3f	; 63
@@ -3087,53 +1984,40 @@ ISR(TIMER0_OVF_vect) {
     1074:	9f 93       	push	r25
     1076:	af 93       	push	r26
     1078:	bf 93       	push	r27
-	cli();
     107a:	f8 94       	cli
-	// 0.01s에 오버플로우 발생, 1/(14745600Hz/1024)ⅹ144 = 0.01s
-	TCNT0	=	0xff - 144;
     107c:	8f e6       	ldi	r24, 0x6F	; 111
     107e:	86 bd       	out	0x26, r24	; 38
-
-	timerCouter++;
-    1080:	80 91 46 04 	lds	r24, 0x0446
-    1084:	90 91 47 04 	lds	r25, 0x0447
-    1088:	a0 91 48 04 	lds	r26, 0x0448
-    108c:	b0 91 49 04 	lds	r27, 0x0449
+    1080:	80 91 40 04 	lds	r24, 0x0440
+    1084:	90 91 41 04 	lds	r25, 0x0441
+    1088:	a0 91 42 04 	lds	r26, 0x0442
+    108c:	b0 91 43 04 	lds	r27, 0x0443
     1090:	01 96       	adiw	r24, 0x01	; 1
     1092:	a1 1d       	adc	r26, r1
     1094:	b1 1d       	adc	r27, r1
-    1096:	80 93 46 04 	sts	0x0446, r24
-    109a:	90 93 47 04 	sts	0x0447, r25
-    109e:	a0 93 48 04 	sts	0x0448, r26
-    10a2:	b0 93 49 04 	sts	0x0449, r27
-	
-	if ( timerCouter >= setTimerCheckCounter )
-    10a6:	40 91 46 04 	lds	r20, 0x0446
-    10aa:	50 91 47 04 	lds	r21, 0x0447
-    10ae:	60 91 48 04 	lds	r22, 0x0448
-    10b2:	70 91 49 04 	lds	r23, 0x0449
-    10b6:	80 91 42 04 	lds	r24, 0x0442
-    10ba:	90 91 43 04 	lds	r25, 0x0443
-    10be:	a0 91 44 04 	lds	r26, 0x0444
-    10c2:	b0 91 45 04 	lds	r27, 0x0445
+    1096:	80 93 40 04 	sts	0x0440, r24
+    109a:	90 93 41 04 	sts	0x0441, r25
+    109e:	a0 93 42 04 	sts	0x0442, r26
+    10a2:	b0 93 43 04 	sts	0x0443, r27
+    10a6:	40 91 40 04 	lds	r20, 0x0440
+    10aa:	50 91 41 04 	lds	r21, 0x0441
+    10ae:	60 91 42 04 	lds	r22, 0x0442
+    10b2:	70 91 43 04 	lds	r23, 0x0443
+    10b6:	80 91 3c 04 	lds	r24, 0x043C
+    10ba:	90 91 3d 04 	lds	r25, 0x043D
+    10be:	a0 91 3e 04 	lds	r26, 0x043E
+    10c2:	b0 91 3f 04 	lds	r27, 0x043F
     10c6:	48 17       	cp	r20, r24
     10c8:	59 07       	cpc	r21, r25
     10ca:	6a 07       	cpc	r22, r26
     10cc:	7b 07       	cpc	r23, r27
     10ce:	58 f0       	brcs	.+22     	; 0x10e6 <__vector_23+0x86>
-	{
-		flagOverflowSetTimer = 1;
     10d0:	81 e0       	ldi	r24, 0x01	; 1
-    10d2:	80 93 41 04 	sts	0x0441, r24
-		timerCouter = 0;
-    10d6:	10 92 46 04 	sts	0x0446, r1
-    10da:	10 92 47 04 	sts	0x0447, r1
-    10de:	10 92 48 04 	sts	0x0448, r1
-    10e2:	10 92 49 04 	sts	0x0449, r1
-	}
-	sei();
+    10d2:	80 93 3b 04 	sts	0x043B, r24
+    10d6:	10 92 40 04 	sts	0x0440, r1
+    10da:	10 92 41 04 	sts	0x0441, r1
+    10de:	10 92 42 04 	sts	0x0442, r1
+    10e2:	10 92 43 04 	sts	0x0443, r1
     10e6:	78 94       	sei
-}
     10e8:	bf 91       	pop	r27
     10ea:	af 91       	pop	r26
     10ec:	9f 91       	pop	r25
@@ -3149,73 +2033,43 @@ ISR(TIMER0_OVF_vect) {
     1100:	18 95       	reti
 
 00001102 <TIMER_100mSInit>:
-  
-void TIMER_100mSInit (void)
-{
-	// Timer/Count0 사용
-	// 동작모드와 클럭소스 및 프리스케일러 결정
-	TCCR0B	=	0x05;  //  fclk_io / 1024   
     1102:	85 e0       	ldi	r24, 0x05	; 5
     1104:	85 bd       	out	0x25, r24	; 37
-	// 0.01s에 오버플로우 발생, 1/(14745600Hz/1024)ⅹ144 = 0.01s
-	// 오버플로우까지 카운트를 144로 설정
-	TCNT0	=	0xff - 144;
     1106:	8f e6       	ldi	r24, 0x6F	; 111
     1108:	86 bd       	out	0x26, r24	; 38
-	TIMSK0	|=	1 << TOIE0;	// Overflow Interupt Enable
     110a:	ee e6       	ldi	r30, 0x6E	; 110
     110c:	f0 e0       	ldi	r31, 0x00	; 0
     110e:	80 81       	ld	r24, Z
     1110:	81 60       	ori	r24, 0x01	; 1
     1112:	80 83       	st	Z, r24
-	TIFR0	|=	1 << TOV0;	// set Overflow Interupt Flag
     1114:	a8 9a       	sbi	0x15, 0	; 21
-}
     1116:	08 95       	ret
 
 00001118 <setElapsedTime100mSUnit>:
-
-
-void setElapsedTime100mSUnit(uint32_t Counter)
-{
     1118:	dc 01       	movw	r26, r24
     111a:	cb 01       	movw	r24, r22
-	setTimerCheckCounter = Counter;
-    111c:	80 93 42 04 	sts	0x0442, r24
-    1120:	90 93 43 04 	sts	0x0443, r25
-    1124:	a0 93 44 04 	sts	0x0444, r26
-    1128:	b0 93 45 04 	sts	0x0445, r27
-	timerCouter = 0;
-    112c:	10 92 46 04 	sts	0x0446, r1
-    1130:	10 92 47 04 	sts	0x0447, r1
-    1134:	10 92 48 04 	sts	0x0448, r1
-    1138:	10 92 49 04 	sts	0x0449, r1
-}
+    111c:	80 93 3c 04 	sts	0x043C, r24
+    1120:	90 93 3d 04 	sts	0x043D, r25
+    1124:	a0 93 3e 04 	sts	0x043E, r26
+    1128:	b0 93 3f 04 	sts	0x043F, r27
+    112c:	10 92 40 04 	sts	0x0440, r1
+    1130:	10 92 41 04 	sts	0x0441, r1
+    1134:	10 92 42 04 	sts	0x0442, r1
+    1138:	10 92 43 04 	sts	0x0443, r1
     113c:	08 95       	ret
 
 0000113e <isElapsed>:
-
-uint8_t isElapsed()
-{
-	if (flagOverflowSetTimer )
-    113e:	80 91 41 04 	lds	r24, 0x0441
+    113e:	80 91 3b 04 	lds	r24, 0x043B
     1142:	88 23       	and	r24, r24
     1144:	21 f0       	breq	.+8      	; 0x114e <isElapsed+0x10>
-	{
-		flagOverflowSetTimer = 0;
-    1146:	10 92 41 04 	sts	0x0441, r1
-		return 1;
+    1146:	10 92 3b 04 	sts	0x043B, r1
     114a:	81 e0       	ldi	r24, 0x01	; 1
     114c:	08 95       	ret
-	}
-	
-	return 0;
     114e:	80 e0       	ldi	r24, 0x00	; 0
-}
     1150:	08 95       	ret
 
 00001152 <eventCallback>:
-#define SERVER_IP_STR	"192.168.10.227"
+#define SERVER_IP_STR	"192.168.1.42"
 #define SERVER_PORT		50001
 
 static void eventCallback(int eventType,uint8_t* rxBuff, int rxSize)
@@ -3350,12 +2204,12 @@ int main(void)
     1218:	92 83       	std	Z+2, r25	; 0x02
     121a:	81 83       	std	Z+1, r24	; 0x01
     121c:	0e 94 df 00 	call	0x1be	; 0x1be <debugprint>
-	if ( !wifiConnectAP("CNDI_AES", "cndi313182246"))
+	if ( !wifiConnectAP("CSNET-301", "gwnucomse"))
     1220:	0f 90       	pop	r0
     1222:	0f 90       	pop	r0
     1224:	8f e6       	ldi	r24, 0x6F	; 111
     1226:	93 e0       	ldi	r25, 0x03	; 3
-    1228:	68 e7       	ldi	r22, 0x78	; 120
+    1228:	69 e7       	ldi	r22, 0x79	; 121
     122a:	73 e0       	ldi	r23, 0x03	; 3
     122c:	0e 94 f3 06 	call	0xde6	; 0xde6 <wifiConnectAP>
     1230:	88 23       	and	r24, r24
@@ -3364,7 +2218,7 @@ int main(void)
 		debugprint("AP connected.\r\n");
     1234:	0f 92       	push	r0
     1236:	0f 92       	push	r0
-    1238:	86 e8       	ldi	r24, 0x86	; 134
+    1238:	83 e8       	ldi	r24, 0x83	; 131
     123a:	93 e0       	ldi	r25, 0x03	; 3
     123c:	ad b7       	in	r26, 0x3d	; 61
     123e:	be b7       	in	r27, 0x3e	; 62
@@ -3382,7 +2236,7 @@ int main(void)
 		debugprint("AP connection fail.\r\n");
     1252:	0f 92       	push	r0
     1254:	0f 92       	push	r0
-    1256:	86 e9       	ldi	r24, 0x96	; 150
+    1256:	83 e9       	ldi	r24, 0x93	; 147
     1258:	93 e0       	ldi	r25, 0x03	; 3
     125a:	ed b7       	in	r30, 0x3d	; 61
     125c:	fe b7       	in	r31, 0x3e	; 62
@@ -3396,7 +2250,7 @@ int main(void)
 	debugprint("\r\n Allocated local IP:\r\n");
     126a:	0f 92       	push	r0
     126c:	0f 92       	push	r0
-    126e:	8c ea       	ldi	r24, 0xAC	; 172
+    126e:	89 ea       	ldi	r24, 0xA9	; 169
     1270:	93 e0       	ldi	r25, 0x03	; 3
     1272:	ad b7       	in	r26, 0x3d	; 61
     1274:	be b7       	in	r27, 0x3e	; 62
@@ -3424,7 +2278,7 @@ int main(void)
 	if( !wifiConnectTCPServer(SERVER_IP_STR,SERVER_PORT))
     129e:	0f 90       	pop	r0
     12a0:	0f 90       	pop	r0
-    12a2:	85 ec       	ldi	r24, 0xC5	; 197
+    12a2:	82 ec       	ldi	r24, 0xC2	; 194
     12a4:	93 e0       	ldi	r25, 0x03	; 3
     12a6:	41 e5       	ldi	r20, 0x51	; 81
     12a8:	53 ec       	ldi	r21, 0xC3	; 195
@@ -3437,7 +2291,7 @@ int main(void)
 		debugprint("Connected Server.\r\n");
     12b6:	0f 92       	push	r0
     12b8:	0f 92       	push	r0
-    12ba:	84 ed       	ldi	r24, 0xD4	; 212
+    12ba:	8f ec       	ldi	r24, 0xCF	; 207
     12bc:	93 e0       	ldi	r25, 0x03	; 3
     12be:	ad b7       	in	r26, 0x3d	; 61
     12c0:	be b7       	in	r27, 0x3e	; 62
@@ -3455,7 +2309,7 @@ int main(void)
 		debugprint("Server connection fail.\r\n");
     12d4:	0f 92       	push	r0
     12d6:	0f 92       	push	r0
-    12d8:	88 ee       	ldi	r24, 0xE8	; 232
+    12d8:	83 ee       	ldi	r24, 0xE3	; 227
     12da:	93 e0       	ldi	r25, 0x03	; 3
     12dc:	ed b7       	in	r30, 0x3d	; 61
     12de:	fe b7       	in	r31, 0x3e	; 62
@@ -3482,8 +2336,8 @@ int main(void)
 	strcpy(strTemp,"test msessage: hello\r\n");
     1304:	de 01       	movw	r26, r28
     1306:	11 96       	adiw	r26, 0x01	; 1
-    1308:	e2 e0       	ldi	r30, 0x02	; 2
-    130a:	f4 e0       	ldi	r31, 0x04	; 4
+    1308:	ed ef       	ldi	r30, 0xFD	; 253
+    130a:	f3 e0       	ldi	r31, 0x03	; 3
     130c:	87 e1       	ldi	r24, 0x17	; 23
     130e:	01 90       	ld	r0, Z+
     1310:	0d 92       	st	X+, r0
@@ -3510,7 +2364,7 @@ int main(void)
 	debugprint("start Loop\r\n");	
     1336:	0f 92       	push	r0
     1338:	0f 92       	push	r0
-    133a:	89 e1       	ldi	r24, 0x19	; 25
+    133a:	84 e1       	ldi	r24, 0x14	; 20
     133c:	94 e0       	ldi	r25, 0x04	; 4
     133e:	ed b7       	in	r30, 0x3d	; 61
     1340:	fe b7       	in	r31, 0x3e	; 62
@@ -3532,7 +2386,7 @@ int main(void)
     1354:	0f 5f       	subi	r16, 0xFF	; 255
     1356:	1f 4f       	sbci	r17, 0xFF	; 255
     1358:	0f 2e       	mov	r0, r31
-    135a:	f6 e2       	ldi	r31, 0x26	; 38
+    135a:	f1 e2       	ldi	r31, 0x21	; 33
     135c:	af 2e       	mov	r10, r31
     135e:	f4 e0       	ldi	r31, 0x04	; 4
     1360:	bf 2e       	mov	r11, r31
@@ -3540,7 +2394,7 @@ int main(void)
 			wifiSendData(strTemp, strlen(strTemp));
 			debugprint("TX:%s\r\n",strTemp);
     1364:	0f 2e       	mov	r0, r31
-    1366:	f1 e3       	ldi	r31, 0x31	; 49
+    1366:	fc e2       	ldi	r31, 0x2C	; 44
     1368:	8f 2e       	mov	r8, r31
     136a:	f4 e0       	ldi	r31, 0x04	; 4
     136c:	9f 2e       	mov	r9, r31
