@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <pthread.h>
@@ -21,7 +22,7 @@ void error_handling(char *message);
 
 int main(int argc, char *argv[])
 {
-
+	
 	pthread_t pthreadListening;				// accept client
 
 	printf("============================================\n");
@@ -112,6 +113,12 @@ void *listening_thread(void *arg)
 #define  RX_DATA_MAX	2048
 void *client_thread(void *arg)
 {
+	struct tm *t;
+	time_t timer;
+
+	timer = time(NULL);
+	t = localtime(&timer);
+
 	pthread_detach(pthread_self());
 	int clnt_sock;
 	clnt_sock = *(int *)arg;
@@ -127,7 +134,7 @@ void *client_thread(void *arg)
 		printf("file open error \n");
 		exit(1);
 	}										//=------------------------수정 ^
-	
+	fprintf(stream,"** %d year %d mon %d day **\n", t->tm_year + 1900, t->tm_mon + 1,t-> tm_mday); 
 	while(1)
 	{
 		if(ftell(stream) > 1000)				//각 파일의 크기 검사 -----------수정 v
@@ -154,11 +161,16 @@ void *client_thread(void *arg)
 
 		if(readBufSize > 0)
 		{
+
+			timer = time(NULL);
+			t = localtime(&timer);
+
 			printf("rx len:%d\n", readBufSize); //read()함수는 정상적으로 읽었다면 읽은 BYTE수를 반환 한다. 
 
 			rcv_buf[readBufSize] = 0;	//맨 뒷자리를 0으로 셋팅  
 			printf("%s\n", rcv_buf);	//읽어온 대로 출력 
 			 
+			fprintf(stream," %d hour %d min %d sec \t",t-> tm_hour, t->tm_min, t->tm_sec); 
 			fprintf(stream,"%s", rcv_buf);	//파일 입력 ----------------------------수정 ============
 			
 			// echo TX
@@ -193,4 +205,3 @@ void error_handling(char *message)
 	fputc('\n', stderr);
 //	exit(1);
 }
-
