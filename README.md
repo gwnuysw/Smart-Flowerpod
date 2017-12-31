@@ -1,9 +1,24 @@
-# RasPiPod
-gwnu 2nd grade raspberrypi project.
-this device is based on raspberrypi and atmega2560 controlboard.
-FlowerPod envirenment is watched by sensers.
-atmega2560 controlboard gets Humi, temp, soli moisture data so control AC motor to give water on flowerpod soil.
-The data that atmega2560 gained send to raspberrypi using wifi AP comunication.
-raspberrypi and atmega2560 controlboard share same wifi AP.
-raspberrypi write received Humi, temp, soil moisture data on *.txt file.
-
+# Smart FlowerPod
+This device manage envirenment of crop for **vertical farmming**.
+Its service is based on two parts, one is control envirenment of pod, another is store data of envirenment on the Internet.
+##1. Control envirenment
+The device sensers temperature, humi, soil moisture and illumination.
+Then it control soil-moisture. if we develop further, we can control more.
+##2. Store data on the Internet
+At the beginning of project, we designed RasspberryPi to store data on the Internet but we don't know how to do that.
+controlboard send data to RasspberryPi through wifi AccessPoint communication.
+RasspberrrPi just store it.
+##[Running device video](http://www.youtube.com/watch?v=bFWi1mrmgvo)
+##Contribution
+We wellcome contributors. check out our directory that has two sub directory.
+- Design beginning (all resources, information)
+  - datasheets
+  - Schematics
+  - expamle projects (use of other devices)
+  - AtmegaLib
+- Workingdir
+  - ATmega (this contain source code for Atmega2560 controlboard)
+  - RaspberryPi (this contain source code for RasspberrrPi as server program)
+  - reports (this contain all documents about this project)
+##License
+I don't choice License yet becouse I don't know all resources in 'Design beginning' directory exact come from. the project progressed by lecture named 'Design beginning' during September to December in 2017.
