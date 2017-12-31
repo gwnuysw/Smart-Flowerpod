@@ -18,7 +18,7 @@ We wellcome contributors. check out our directory that has two sub directory.
 - Design beginning (all resources, information)
   - datasheets
   - Schematics
-  - expamle projects (use of other devices)
+  - expamle projects (use of other devices, sensers)
   - AtmegaLib
 - Workingdir
   - ATmega (this contain source code for Atmega2560 controlboard)
