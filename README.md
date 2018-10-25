@@ -12,6 +12,8 @@ controlboard send data to RasspberryPi through wifi AccessPoint communication.
 RasspberrrPi just store it.
 
 ## [Running device video](http://www.youtube.com/watch?v=bFWi1mrmgvo)
+## [Presentation](https://docs.google.com/presentation/d/10VtbtbHZbr2zLHU4GmD3ix2XDgnNsWMyZWsQEaYHdnU/edit?usp=sharing)
+## [report](https://docs.google.com/document/d/12F0riSTwG4JUVup6Jfc6FNtPw7OqBEzBataWK_cbW_U/edit?usp=sharing)
 
 ## Contribution
 We wellcome contributors. check out our directory that has two sub directory.
